@@ -1,0 +1,3 @@
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Common\bin\Release\Common.dll
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Common\obj\Release\Common.csprojResolveAssemblyReference.cache
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Common\obj\Release\Common.dll

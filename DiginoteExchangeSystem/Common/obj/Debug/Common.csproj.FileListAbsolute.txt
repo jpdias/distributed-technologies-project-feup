@@ -1,0 +1,4 @@
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Common\bin\Debug\Common.dll
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Common\bin\Debug\Common.pdb
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Common\obj\Debug\Common.dll
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Common\obj\Debug\Common.pdb
