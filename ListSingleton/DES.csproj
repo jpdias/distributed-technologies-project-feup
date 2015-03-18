@@ -61,7 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common.cs" />
+    <Compile Include="User.cs" />
     <Compile Include="DES.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
