@@ -1,0 +1,18 @@
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\Server.exe.config
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\Server.exe
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\Server.pdb
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\Common.dll
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\ListSingleton.dll
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\Common.pdb
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\bin\Debug\ListSingleton.pdb
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\obj\Debug\Server.exe
+C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\Server\obj\Debug\Server.pdb
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\Server.exe.config
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\Server.exe
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\Server.pdb
+D:\Projects\DiginoteExchangeSystem\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+D:\Projects\DiginoteExchangeSystem\Server\obj\Debug\Server.exe
+D:\Projects\DiginoteExchangeSystem\Server\obj\Debug\Server.pdb
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\DES.dll
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\DES.pdb

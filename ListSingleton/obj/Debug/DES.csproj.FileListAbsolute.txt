@@ -1,0 +1,4 @@
+D:\Projects\DiginoteExchangeSystem\ListSingleton\bin\Debug\DES.dll
+D:\Projects\DiginoteExchangeSystem\ListSingleton\bin\Debug\DES.pdb
+D:\Projects\DiginoteExchangeSystem\ListSingleton\obj\Debug\DES.dll
+D:\Projects\DiginoteExchangeSystem\ListSingleton\obj\Debug\DES.pdb

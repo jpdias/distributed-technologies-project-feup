@@ -1,7 +1,0 @@
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\bin\Debug\ListSingleton.dll
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\bin\Debug\ListSingleton.pdb
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\bin\Debug\Common.dll
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\bin\Debug\Common.pdb
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\obj\Debug\ListSingleton.csprojResolveAssemblyReference.cache
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\obj\Debug\ListSingleton.dll
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Trabalhos\DiginoteExchangeSystem\ListSingleton\obj\Debug\ListSingleton.pdb
