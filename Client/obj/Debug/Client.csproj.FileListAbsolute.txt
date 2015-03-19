@@ -18,3 +18,13 @@ D:\Projects\DiginoteExchangeSystem\Client\obj\Debug\Client.exe
 D:\Projects\DiginoteExchangeSystem\Client\obj\Debug\Client.pdb
 D:\Projects\DiginoteExchangeSystem\Client\bin\Debug\DES.dll
 D:\Projects\DiginoteExchangeSystem\Client\bin\Debug\DES.pdb
+C:\Users\João\Git\TDIN\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+C:\Users\João\Git\TDIN\Client\obj\Debug\Client.Properties.Resources.resources
+C:\Users\João\Git\TDIN\Client\obj\Debug\Client.csproj.GenerateResource.Cache
+C:\Users\João\Git\TDIN\Client\bin\Debug\Client.exe.config
+C:\Users\João\Git\TDIN\Client\bin\Debug\Client.exe
+C:\Users\João\Git\TDIN\Client\bin\Debug\Client.pdb
+C:\Users\João\Git\TDIN\Client\bin\Debug\DES.dll
+C:\Users\João\Git\TDIN\Client\bin\Debug\DES.pdb
+C:\Users\João\Git\TDIN\Client\obj\Debug\Client.exe
+C:\Users\João\Git\TDIN\Client\obj\Debug\Client.pdb
