@@ -1,9 +1,0 @@
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\bin\Release\Client.exe.config
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\bin\Release\Client.exe
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\bin\Release\Common.dll
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\obj\Release\Client.csprojResolveAssemblyReference.cache
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\obj\Release\ClientWindow.resources
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\obj\Release\CommentDlg.resources
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\obj\Release\Client.Properties.Resources.resources
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\obj\Release\Client.csproj.GenerateResource.Cache
-C:\Users\João\Documents\FEUP\4º Ano\2º Semestre\Tecnologias de Distribuição e Integração\Demos\RemotingWithEvents\RemotingWithEvents\Client\obj\Release\Client.exe
