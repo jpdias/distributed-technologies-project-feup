@@ -18,11 +18,3 @@ public class User
     }
 }
 
-public interface IUser
-{
-  string AddUser(string name, string nickname, string password);
-  string RemoveUser(string nickname, string password);
-  ArrayList GetUsersList();
-  string Login(string nickname, string password);
-  string Logout(string nickname, string password);
-}

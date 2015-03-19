@@ -11,13 +11,13 @@ class ClientApp {
 
     class ClientConsole
     {
-        private IUser _user;
-        ArrayList users;
+        private IDES _iDes;
+        private ArrayList _users;
 
         public ClientConsole()
         {
             RemotingConfiguration.Configure("Client.exe.config", false);
-            _user = (IUser)RemoteNew.New(typeof(IUser));
+            _iDes = (IDES)RemoteNew.New(typeof(IDES));
             Console.WriteLine("Diginote Exchange System v0.1");
             Console.WriteLine("Welcome!");
             string option;
@@ -76,7 +76,7 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            string result = _user.AddUser(name, nickname, password);
+            string result = _iDes.AddUser(name, nickname, password);
             Console.WriteLine(result);
         }
 
@@ -88,7 +88,7 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            string result = _user.RemoveUser(nickname, password);
+            string result = _iDes.RemoveUser(nickname, password);
             Console.WriteLine(result);
         }
 
@@ -100,7 +100,7 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            string result = _user.Login(nickname, password);
+            string result = _iDes.Login(nickname, password);
             Console.WriteLine(result);
         }
 
@@ -112,7 +112,7 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            string result = _user.Logout(nickname, password);
+            string result = _iDes.Logout(nickname, password);
             Console.WriteLine(result);
         }
 
@@ -120,16 +120,16 @@ class ClientApp {
         {
             Console.WriteLine("Users");
             
-            users = _user.GetUsersList();
+            _users = _iDes.GetUsersList();
 
-            if(users.Count == 0)
+            if(_users.Count == 0)
             {
                 Console.WriteLine("No registered users!");
             }
             else
             {
                 var userIndex = 0;
-                foreach (User user in users)
+                foreach (User user in _users)
                 {
                     Console.WriteLine();
                     Console.WriteLine("User #" + (userIndex + 1));

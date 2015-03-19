@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Threading;
 
-public class DES : MarshalByRefObject, IUser {
+public class DES : MarshalByRefObject, IDES {
   ArrayList usersList;
 
   public DES()
@@ -124,4 +124,12 @@ public class DES : MarshalByRefObject, IUser {
 
       return "Logout error: Nickname not found!";
   }
+}
+public interface IDES
+{
+    string AddUser(string name, string nickname, string password);
+    string RemoveUser(string nickname, string password);
+    ArrayList GetUsersList();
+    string Login(string nickname, string password);
+    string Logout(string nickname, string password);
 }
