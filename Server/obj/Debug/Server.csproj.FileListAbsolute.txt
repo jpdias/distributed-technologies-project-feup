@@ -14,8 +14,6 @@ D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\Server.pdb
 D:\Projects\DiginoteExchangeSystem\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
 D:\Projects\DiginoteExchangeSystem\Server\obj\Debug\Server.exe
 D:\Projects\DiginoteExchangeSystem\Server\obj\Debug\Server.pdb
-D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\DES.dll
-D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\DES.pdb
 C:\Users\João\Git\TDIN\Server\bin\Debug\Server.exe.config
 C:\Users\João\Git\TDIN\Server\bin\Debug\Server.exe
 C:\Users\João\Git\TDIN\Server\bin\Debug\Server.pdb
@@ -24,3 +22,5 @@ C:\Users\João\Git\TDIN\Server\obj\Debug\Server.exe
 C:\Users\João\Git\TDIN\Server\obj\Debug\Server.pdb
 C:\Users\João\Git\TDIN\Server\bin\Debug\DES.dll
 C:\Users\João\Git\TDIN\Server\bin\Debug\DES.pdb
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\Common.dll
+D:\Projects\DiginoteExchangeSystem\Server\bin\Debug\Common.pdb
