@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Runtime.Remoting;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 class ClientApp {
     static void Main(string[] args)
@@ -12,7 +13,8 @@ class ClientApp {
     class ClientConsole
     {
         private IDES _iDes;
-        private ArrayList _users;
+        private ArrayList users;
+        Dictionary<Diginote, User> market;
 
         public ClientConsole()
         {
@@ -29,7 +31,7 @@ class ClientApp {
                 Console.WriteLine("2 - Remove User");
                 Console.WriteLine("3 - Login");
                 Console.WriteLine("4 - Logout");
-                Console.WriteLine("5 - Users");
+                Console.WriteLine("5 - Market");
                 Console.WriteLine("0 - Exit");
                 Console.Write("Option: ");
                 option = Console.ReadLine();
@@ -56,7 +58,7 @@ class ClientApp {
                         break;
                     case "5":
                         Console.WriteLine();
-                        listUsers();
+                        listMarket();
                         break;
                     default:
                         Console.WriteLine("Invalid option!");
@@ -120,16 +122,16 @@ class ClientApp {
         {
             Console.WriteLine("Users");
             
-            _users = _iDes.GetUsersList();
+            users = _iDes.GetUsersList();
 
-            if(_users.Count == 0)
+            if(users.Count == 0)
             {
                 Console.WriteLine("No registered users!");
             }
             else
             {
                 var userIndex = 0;
-                foreach (User user in _users)
+                foreach (User user in users)
                 {
                     Console.WriteLine();
                     Console.WriteLine("User #" + (userIndex + 1));
@@ -137,6 +139,36 @@ class ClientApp {
                     Console.WriteLine("  Nickname: " + user.Nickname);
                     Console.WriteLine("  LoggedIn: " + user.LoggedIn);
                     userIndex += 1;
+                }
+            }
+        }
+
+        public void listMarket()
+        {
+            Console.WriteLine("Market");
+
+            market = _iDes.GetMarket();
+
+            if (market.Count == 0)
+            {
+                Console.WriteLine("Empty market!");
+            }
+            else
+            {
+                foreach (var entry in market)
+                {
+                    Console.WriteLine(entry.Key);
+
+                    if(entry.Value != null)
+                    {
+                        Console.WriteLine(entry.Value);
+                    }
+                    else
+                    {
+                        Console.WriteLine("No associated user!");
+                    }
+
+                    Console.WriteLine();
                 }
             }
         }

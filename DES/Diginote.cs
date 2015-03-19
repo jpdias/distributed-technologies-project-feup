@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections;
 
 [Serializable]
-class Diginote
+public class Diginote
 {
     private static int Serial = 0;
     public int Id { get; set; }
@@ -17,5 +17,10 @@ class Diginote
         Serial += 1;
         this.Id = Serial;
         this.Quote = 1.0f;
+    }
+
+    public override string ToString()
+    {
+        return "Diginote's" + " " + "#" + Id + " " + "quote: " + Quote + "€";
     }
 }

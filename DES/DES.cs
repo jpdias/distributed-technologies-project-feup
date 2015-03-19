@@ -23,6 +23,11 @@ public class DES : MarshalByRefObject, IDES
         diginotesList.Add(diginote);
 
         market.Add(diginote, user);
+
+        diginote = new Diginote();
+        diginotesList.Add(diginote);
+
+        market.Add(diginote, null);
     }
 
     public override object InitializeLifetimeService()
@@ -153,4 +158,5 @@ public interface IDES
     ArrayList GetUsersList();
     string Login(string nickname, string password);
     string Logout(string nickname, string password);
+    Dictionary<Diginote, User> GetMarket();
 }

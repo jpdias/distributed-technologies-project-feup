@@ -16,5 +16,10 @@ public class User
         Password = password;
         LoggedIn = false;
     }
+
+    public override string ToString()
+    {
+        return "User's" + " " + "nickname: " + Nickname;
+    }
 }
 
