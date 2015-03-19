@@ -11,13 +11,13 @@ class ClientApp {
 
     class ClientConsole
     {
-        IUser listServer;
+        private IUser _user;
         ArrayList users;
 
         public ClientConsole()
         {
             RemotingConfiguration.Configure("Client.exe.config", false);
-            listServer = (IUser)RemoteNew.New(typeof(IUser));
+            _user = (IUser)RemoteNew.New(typeof(IUser));
             Console.WriteLine("Diginote Exchange System v0.1");
             Console.WriteLine("Welcome!");
             string option;
@@ -28,7 +28,8 @@ class ClientApp {
                 Console.WriteLine("1 - Add User");
                 Console.WriteLine("2 - Remove User");
                 Console.WriteLine("3 - Login");
-                Console.WriteLine("4 - Users");
+                Console.WriteLine("4 - Logout");
+                Console.WriteLine("5 - Users");
                 Console.WriteLine("0 - Exit");
                 Console.Write("Option: ");
                 option = Console.ReadLine();
@@ -51,6 +52,10 @@ class ClientApp {
                         break;
                     case "4":
                         Console.WriteLine();
+                        logout();
+                        break;
+                    case "5":
+                        Console.WriteLine();
                         listUsers();
                         break;
                     default:
@@ -71,15 +76,8 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            bool add = listServer.AddUser(name, nickname, password);
-            if (add)
-            {
-                Console.WriteLine("User added successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Error adding user: Nickname already exists!");
-            }
+            string result = _user.AddUser(name, nickname, password);
+            Console.WriteLine(result);
         }
 
         public void removeUser()
@@ -90,15 +88,8 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            bool add = listServer.RemoveUser(nickname, password);
-            if (add)
-            {
-                Console.WriteLine("User removed successfully!");
-            }
-            else
-            {
-                Console.WriteLine("Error removing user: Wrong nickname/password!");
-            }
+            string result = _user.RemoveUser(nickname, password);
+            Console.WriteLine(result);
         }
 
         public void login()
@@ -109,22 +100,27 @@ class ClientApp {
             string nickname = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
-            bool login = listServer.Login(nickname, password);
-            if (login)
-            {
-                Console.WriteLine("Login successful!");
-            }
-            else
-            {
-                Console.WriteLine("Login error!");
-            }
+            string result = _user.Login(nickname, password);
+            Console.WriteLine(result);
+        }
+
+        public void logout()
+        {
+            Console.WriteLine("Logout");
+
+            Console.Write("Nickname: ");
+            string nickname = Console.ReadLine();
+            Console.Write("Password: ");
+            string password = Console.ReadLine();
+            string result = _user.Logout(nickname, password);
+            Console.WriteLine(result);
         }
 
         public void listUsers()
         {
             Console.WriteLine("Users");
             
-            users = listServer.GetUsersList();
+            users = _user.GetUsersList();
 
             if(users.Count == 0)
             {
@@ -139,6 +135,7 @@ class ClientApp {
                     Console.WriteLine("User #" + (userIndex + 1));
                     Console.WriteLine("  Name: " + user.Name);
                     Console.WriteLine("  Nickname: " + user.Nickname);
+                    Console.WriteLine("  LoggedIn: " + user.LoggedIn);
                     userIndex += 1;
                 }
             }
