@@ -61,6 +61,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Diginote.cs" />
     <Compile Include="User.cs" />
     <Compile Include="DES.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

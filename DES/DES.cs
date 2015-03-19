@@ -1,130 +1,151 @@
 ﻿using System;
 using System.Collections;
 using System.Threading;
+using System.Collections.Generic;
 
-public class DES : MarshalByRefObject, IDES {
-  ArrayList usersList;
+public class DES : MarshalByRefObject, IDES
+{
+    ArrayList usersList;
+    ArrayList diginotesList;
+    Dictionary<Diginote, User> market;
 
-  public DES()
-  {
-      Console.WriteLine("Constructor called.");
-      usersList = new ArrayList();
-  }
+    public DES()
+    {
+        Console.WriteLine("Constructor called.");
+        usersList = new ArrayList();
+        diginotesList = new ArrayList();
+        market = new Dictionary<Diginote, User>();
 
-  public override object InitializeLifetimeService()
-  {
-      return null;
-  }
+        User user = new User("Joao", "joao", "joao");
+        usersList.Add(user);
 
-  public string AddUser(string name, string nickname, string password)
-  {
-      Console.WriteLine("AddUser called.");
+        Diginote diginote = new Diginote();
+        diginotesList.Add(diginote);
 
-      foreach(User user in usersList)
-      {
-          if(user.Nickname.Equals(nickname))
-          {
-              return "Error adding user: Nickname already exists!";
-          }
-      }
+        market.Add(diginote, user);
+    }
 
-      User newUser = new User(name, nickname, password);
-      usersList.Add(newUser);
-      return "User added successfully!";
-  }
+    public override object InitializeLifetimeService()
+    {
+        return null;
+    }
 
-  public string RemoveUser(string nickname, string password)
-  {
-      Console.WriteLine("RemoveUser called.");
+    public string AddUser(string name, string nickname, string password)
+    {
+        Console.WriteLine("AddUser called.");
 
-      var userIndex = 0;
-      foreach(User user in usersList)
-      {
-          if(user.Nickname.Equals(nickname))
-          {
-              if(user.Password.Equals(password))
-              {
-                  usersList.RemoveAt(userIndex);
-                  return "User removed successfully!";
-              }
-              else
-              {
-                  return "Error removing user: Wrong password!";
-              }
-          }
+        foreach (User user in usersList)
+        {
+            if (user.Nickname.Equals(nickname))
+            {
+                return "Error adding user: Nickname already exists!";
+            }
+        }
 
-          userIndex += 1;
-      }
+        User newUser = new User(name, nickname, password);
+        usersList.Add(newUser);
+        return "User added successfully!";
+    }
 
-      return "Error removing user: Nickname not found!";
-  }
+    public string RemoveUser(string nickname, string password)
+    {
+        Console.WriteLine("RemoveUser called.");
 
-  public ArrayList GetUsersList()
-  {
-      Console.WriteLine("GetUsersList called.");
-      return usersList;
-  }
+        var userIndex = 0;
+        foreach (User user in usersList)
+        {
+            if (user.Nickname.Equals(nickname))
+            {
+                if (user.Password.Equals(password))
+                {
+                    usersList.RemoveAt(userIndex);
+                    return "User removed successfully!";
+                }
+                else
+                {
+                    return "Error removing user: Wrong password!";
+                }
+            }
 
-  public string Login(string nickname, string password)
-  {
-      Console.WriteLine("Login called.");
+            userIndex += 1;
+        }
 
-      foreach(User user in usersList)
-      {
-          if(user.Nickname.Equals(nickname))
-          {
-              if(user.Password.Equals(password))
-              {
-                  if(user.LoggedIn == false)
-                  {
-                      user.LoggedIn = true;
-                      return "Login successful!";
-                  }
-                  else
-                  {
-                      return "Login error: User is already logged in!";
-                  }
-              }
-              else
-              {
-                  return "Login error: Wrong password!";
-              }
-          }
-      }
+        return "Error removing user: Nickname not found!";
+    }
 
-      return "Login error: Nickname not found!";
-  }
+    public ArrayList GetUsersList()
+    {
+        Console.WriteLine("GetUsersList called.");
+        return usersList;
+    }
 
-  public string Logout(string nickname, string password)
-  {
-      Console.WriteLine("Logout called.");
+    public string Login(string nickname, string password)
+    {
+        Console.WriteLine("Login called.");
 
-      foreach (User user in usersList)
-      {
-          if (user.Nickname.Equals(nickname))
-          {
-              if (user.Password.Equals(password))
-              {
-                  if (user.LoggedIn)
-                  {
-                      user.LoggedIn = false;
-                      return "Logout successful!";
-                  }
-                  else
-                  {
-                      return "Logout error: User is not logged in!";
-                  }
-              }
-              else
-              {
-                  return "Logout error: Wrong password!";
-              }
-          }
-      }
+        foreach (User user in usersList)
+        {
+            if (user.Nickname.Equals(nickname))
+            {
+                if (user.Password.Equals(password))
+                {
+                    if (user.LoggedIn == false)
+                    {
+                        user.LoggedIn = true;
+                        return "Login successful!";
+                    }
+                    else
+                    {
+                        return "Login error: User is already logged in!";
+                    }
+                }
+                else
+                {
+                    return "Login error: Wrong password!";
+                }
+            }
+        }
 
-      return "Logout error: Nickname not found!";
-  }
+        return "Login error: Nickname not found!";
+    }
+
+    public string Logout(string nickname, string password)
+    {
+        Console.WriteLine("Logout called.");
+
+        foreach (User user in usersList)
+        {
+            if (user.Nickname.Equals(nickname))
+            {
+                if (user.Password.Equals(password))
+                {
+                    if (user.LoggedIn)
+                    {
+                        user.LoggedIn = false;
+                        return "Logout successful!";
+                    }
+                    else
+                    {
+                        return "Logout error: User is not logged in!";
+                    }
+                }
+                else
+                {
+                    return "Logout error: Wrong password!";
+                }
+            }
+        }
+
+        return "Logout error: Nickname not found!";
+    }
+
+    public Dictionary<Diginote, User> GetMarket()
+    {
+        Console.WriteLine("GetMarket called.");
+        return market;
+    }
 }
+
 public interface IDES
 {
     string AddUser(string name, string nickname, string password);
