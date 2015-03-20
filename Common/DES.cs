@@ -21,11 +21,13 @@ namespace Common
             usersList.Add(user);
 
             Diginote diginote = new Diginote();
+            diginote.Quote = 0.98f;
             diginotesList.Add(diginote);
 
             market.Add(diginote, user);
 
             diginote = new Diginote();
+            diginote.Quote = 1.00f;
             diginotesList.Add(diginote);
 
             market.Add(diginote, null);
@@ -150,6 +152,22 @@ namespace Common
             Console.WriteLine("GetMarket called.");
             return market;
         }
+
+        public float GetQuote()
+        {
+            float quote = 0.0f;
+            int numDiginotes = 0;
+
+            foreach (var entry in market)
+            {
+                quote += entry.Key.Quote;
+                numDiginotes += 1;
+            }
+
+            quote = quote / numDiginotes;
+
+            return quote;
+        }
     }
 
     public interface IDES
@@ -160,5 +178,6 @@ namespace Common
         string Login(string nickname, string password);
         string Logout(string nickname, string password);
         Dictionary<Diginote, User> GetMarket();
+        float GetQuote();
     }
 }

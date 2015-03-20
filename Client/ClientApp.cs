@@ -17,7 +17,7 @@ namespace Client
         class ClientConsole
         {
             private IDES _iDes;
-            private ArrayList users;
+            private Boolean loggedIn;
             Dictionary<Diginote, User> market;
 
             public ClientConsole()
@@ -31,43 +31,65 @@ namespace Client
                 {
                     Console.WriteLine();
                     Console.WriteLine("Menu:");
-                    Console.WriteLine("1 - Add User");
-                    Console.WriteLine("2 - Remove User");
-                    Console.WriteLine("3 - Login");
-                    Console.WriteLine("4 - Logout");
-                    Console.WriteLine("5 - Market");
+                    if(loggedIn == false)
+                    {
+                        Console.WriteLine("1 - Login");
+                        Console.WriteLine("2 - Add User");
+                        Console.WriteLine("3 - Remove User");
+                    }
+                    else
+                    {
+                        Console.WriteLine("1 - Logout");
+                        Console.WriteLine("2 - Market Quote");
+                    }
                     Console.WriteLine("0 - Exit");
                     Console.Write("Option: ");
                     option = Console.ReadLine();
-                    switch (option)
+                    if(loggedIn == false)
                     {
-                        case "0":
-                            Application.Exit();
-                            break;
-                        case "1":
-                            Console.WriteLine();
-                            addUser();
-                            break;
-                        case "2":
-                            Console.WriteLine();
-                            removeUser();
-                            break;
-                        case "3":
-                            Console.WriteLine();
-                            login();
-                            break;
-                        case "4":
-                            Console.WriteLine();
-                            logout();
-                            break;
-                        case "5":
-                            Console.WriteLine();
-                            listMarket();
-                            break;
-                        default:
-                            Console.WriteLine("Invalid option!");
-                            break;
+                        switch (option)
+                        {
+                            case "0":
+                                Application.Exit();
+                                break;
+                            case "1":
+                                Console.WriteLine();
+                                login();
+                                break;
+                            case "2":
+                                Console.WriteLine();
+                                addUser();
+                                break;
+                            case "3":
+                                Console.WriteLine();
+                                removeUser();
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option!");
+                                break;
+                        }
                     }
+                    else
+                    {
+                        switch (option)
+                        {
+                            case "0":
+                                Application.Exit();
+                                break;
+                            case "1":
+                                Console.WriteLine();
+                                logout();
+                                break;
+                            case "2":
+                                Console.WriteLine();
+                                getQuote();
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option!");
+                                break;
+                        }
+                    }
+                    
                 }
                 while (option != "0");
             }
@@ -107,6 +129,10 @@ namespace Client
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
                 string result = _iDes.Login(nickname, password);
+                if (result.Equals("Login successful!"))
+                {
+                    loggedIn = true;
+                }
                 Console.WriteLine(result);
             }
 
@@ -119,6 +145,10 @@ namespace Client
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
                 string result = _iDes.Logout(nickname, password);
+                if (result.Equals("Logout successful!"))
+                {
+                    loggedIn = false;
+                }
                 Console.WriteLine(result);
             }
 
@@ -126,7 +156,7 @@ namespace Client
             {
                 Console.WriteLine("Users");
 
-                users = _iDes.GetUsersList();
+                ArrayList users = _iDes.GetUsersList();
 
                 if (users.Count == 0)
                 {
@@ -176,10 +206,45 @@ namespace Client
                     }
                 }
             }
+
+            public void getQuote()
+            {
+                Console.WriteLine("Current Quote");
+
+                float quote = _iDes.GetQuote();
+
+                if (quote == 0.0f)
+                {
+                    Console.WriteLine("No diginotes available on the market!");
+                }
+                else
+                {
+                    Console.WriteLine(quote + "€");
+                }
+            }
         }
 
         /* Mechanism for instanciating a remote object through its interface, using the config file */
+        class RemoteNew
+        {
+            private static Hashtable types = null;
 
-       
+            private static void InitTypeTable()
+            {
+                types = new Hashtable();
+                foreach (WellKnownClientTypeEntry entry in RemotingConfiguration.GetRegisteredWellKnownClientTypes())
+                    types.Add(entry.ObjectType, entry);
+            }
+
+            public static object New(Type type)
+            {
+                if (types == null)
+                    InitTypeTable();
+                WellKnownClientTypeEntry entry = (WellKnownClientTypeEntry)types[type];
+                if (entry == null)
+                    throw new RemotingException("Type not found!");
+                return RemotingServices.Connect(type, entry.ObjectUrl);
+            }
+        }
     }
 }
