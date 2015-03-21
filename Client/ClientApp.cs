@@ -17,7 +17,7 @@ namespace Client
         class ClientConsole
         {
             private IDES _iDes;
-            private Boolean loggedIn;
+            private User loggedUser;
             Dictionary<Diginote, User> market;
 
             public ClientConsole()
@@ -31,7 +31,7 @@ namespace Client
                 {
                     Console.WriteLine();
                     Console.WriteLine("Menu:");
-                    if(loggedIn == false)
+                    if(loggedUser == null)
                     {
                         Console.WriteLine("1 - Login");
                         Console.WriteLine("2 - Add User");
@@ -41,11 +41,13 @@ namespace Client
                     {
                         Console.WriteLine("1 - Logout");
                         Console.WriteLine("2 - Market Quote");
+                        Console.WriteLine("3 - My Sale Orders");
+                        Console.WriteLine("4 - My Buy Orders");
                     }
                     Console.WriteLine("0 - Exit");
                     Console.Write("Option: ");
                     option = Console.ReadLine();
-                    if(loggedIn == false)
+                    if (loggedUser == null)
                     {
                         switch (option)
                         {
@@ -54,7 +56,7 @@ namespace Client
                                 break;
                             case "1":
                                 Console.WriteLine();
-                                login();
+                                Login();
                                 break;
                             case "2":
                                 Console.WriteLine();
@@ -78,11 +80,19 @@ namespace Client
                                 break;
                             case "1":
                                 Console.WriteLine();
-                                logout();
+                                Logout();
                                 break;
                             case "2":
                                 Console.WriteLine();
-                                getQuote();
+                                GetQuote();
+                                break;
+                            case "3":
+                                Console.WriteLine();
+                                ListSaleOrders();
+                                break;
+                            case "4":
+                                Console.WriteLine();
+                                ListBuyOrders();
                                 break;
                             default:
                                 Console.WriteLine("Invalid option!");
@@ -120,7 +130,7 @@ namespace Client
                 Console.WriteLine(result);
             }
 
-            public void login()
+            public void Login()
             {
                 Console.WriteLine("Login");
 
@@ -129,14 +139,15 @@ namespace Client
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
                 string result = _iDes.Login(nickname, password);
+                Console.WriteLine(result);
                 if (result.Equals("Login successful!"))
                 {
-                    loggedIn = true;
+                    loggedUser = _iDes.GetUser(nickname);
+                    Console.WriteLine("Hello " + loggedUser.Nickname + "!");
                 }
-                Console.WriteLine(result);
             }
 
-            public void logout()
+            public void Logout()
             {
                 Console.WriteLine("Logout");
 
@@ -145,14 +156,15 @@ namespace Client
                 Console.Write("Password: ");
                 string password = Console.ReadLine();
                 string result = _iDes.Logout(nickname, password);
+                Console.WriteLine(result);
                 if (result.Equals("Logout successful!"))
                 {
-                    loggedIn = false;
+                    loggedUser = _iDes.GetUser(nickname);
+                    Console.WriteLine("See you soon " + loggedUser.Nickname + "!");
                 }
-                Console.WriteLine(result);
             }
 
-            public void listUsers()
+            public void ListUsers()
             {
                 Console.WriteLine("Users");
 
@@ -177,7 +189,7 @@ namespace Client
                 }
             }
 
-            public void listMarket()
+            public void ListMarket()
             {
                 Console.WriteLine("Market");
 
@@ -207,7 +219,7 @@ namespace Client
                 }
             }
 
-            public void getQuote()
+            public void GetQuote()
             {
                 Console.WriteLine("Current Quote");
 
@@ -220,6 +232,48 @@ namespace Client
                 else
                 {
                     Console.WriteLine(quote + "€");
+                }
+            }
+
+            public void ListSaleOrders()
+            {
+                Console.WriteLine("My Sale Orders");
+
+                ArrayList saleOrders = _iDes.GetSaleOrders(loggedUser);
+
+                if (saleOrders.Count == 0)
+                {
+                    Console.WriteLine("No sale orders!");
+                }
+                else
+                {
+                    var saleOrderIndex = 1;
+                    foreach(Order saleOrder in saleOrders)
+                    {
+                        Console.WriteLine("Order #" + saleOrderIndex + "'s quantity: " + saleOrder.Quantity);
+                        saleOrderIndex += 1;
+                    }
+                }
+            }
+
+            public void ListBuyOrders()
+            {
+                Console.WriteLine("My Buy Orders");
+
+                ArrayList buyOrders = _iDes.GetBuyOrders(loggedUser);
+
+                if (buyOrders.Count == 0)
+                {
+                    Console.WriteLine("No buy orders!");
+                }
+                else
+                {
+                    var buyOrderIndex = 1;
+                    foreach (Order buyOrder in buyOrders)
+                    {
+                        Console.WriteLine("Order #" + buyOrderIndex + "'s quantity: " + buyOrder.Quantity);
+                        buyOrderIndex += 1;
+                    }
                 }
             }
         }

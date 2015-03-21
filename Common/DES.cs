@@ -18,18 +18,17 @@ namespace Common
             market = new Dictionary<Diginote, User>();
 
             User user = new User("Joao", "joao", "joao");
+            user.AddBuyOrder(10);
             usersList.Add(user);
 
             Diginote diginote = new Diginote();
             diginote.Quote = 0.98f;
             diginotesList.Add(diginote);
-
             market.Add(diginote, user);
 
             diginote = new Diginote();
             diginote.Quote = 1.00f;
             diginotesList.Add(diginote);
-
             market.Add(diginote, null);
         }
 
@@ -117,6 +116,21 @@ namespace Common
             return "Login error: Nickname not found!";
         }
 
+        public User GetUser(string nickname)
+        {
+            Console.WriteLine("GetUser called.");
+
+            foreach (User user in usersList)
+            {
+                if (user.Nickname.Equals(nickname))
+                {
+                    return user;
+                }
+            }
+
+            return null;
+        }
+
         public string Logout(string nickname, string password)
         {
             Console.WriteLine("Logout called.");
@@ -168,6 +182,16 @@ namespace Common
 
             return quote;
         }
+
+        public ArrayList GetSaleOrders(User user)
+        {
+            return user.SaleOrders;
+        }
+
+        public ArrayList GetBuyOrders(User user)
+        {
+            return user.BuyOrders;
+        }
     }
 
     public interface IDES
@@ -176,8 +200,11 @@ namespace Common
         string RemoveUser(string nickname, string password);
         ArrayList GetUsersList();
         string Login(string nickname, string password);
+        User GetUser(string nickname);
         string Logout(string nickname, string password);
         Dictionary<Diginote, User> GetMarket();
         float GetQuote();
+        ArrayList GetSaleOrders(User user);
+        ArrayList GetBuyOrders(User user);
     }
 }

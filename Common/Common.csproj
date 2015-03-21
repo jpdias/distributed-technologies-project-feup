@@ -61,8 +61,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Order.cs" />
     <Compile Include="DES.cs" />
     <Compile Include="Diginote.cs" />
+    <Compile Include="BuyOrder.cs" />
+    <Compile Include="SaleOrder.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

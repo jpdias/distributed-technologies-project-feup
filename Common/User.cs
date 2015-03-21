@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 
 namespace Common
 {
@@ -9,6 +10,8 @@ namespace Common
         public string Nickname { get; set; }
         public string Password { get; set; }
         public bool LoggedIn { get; set; }
+        public ArrayList SaleOrders { get; set; }
+        public ArrayList BuyOrders { get; set; }
 
         public User(string name, string nickname, string password)
         {
@@ -16,8 +19,19 @@ namespace Common
             Nickname = nickname;
             Password = password;
             LoggedIn = false;
+            SaleOrders = new ArrayList();
+            BuyOrders = new ArrayList();
         }
 
+        public void AddSaleOrder(int quantity)
+        {
+            SaleOrders.Add(new SaleOrder(quantity));
+        }
+
+        public void AddBuyOrder(int quantity)
+        {
+            SaleOrders.Add(new SaleOrder(quantity));
+        }
 
         public override string ToString()
         {
