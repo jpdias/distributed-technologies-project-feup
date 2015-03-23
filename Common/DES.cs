@@ -163,7 +163,6 @@ namespace Common
 
         public Dictionary<Diginote, User> GetMarket()
         {
-            Console.WriteLine("GetMarket called.");
             return market;
         }
 
@@ -183,14 +182,24 @@ namespace Common
             return quote;
         }
 
-        public ArrayList GetSaleOrders(User user)
+        public List<SaleOrder> GetSaleOrders(User user)
         {
             return user.SaleOrders;
         }
+        
+        public void EditSaleOrder(ref User user, int orderIndex, int quantity)
+        {
+            user.EditSaleOrder(orderIndex, quantity);
+        }
 
-        public ArrayList GetBuyOrders(User user)
+        public List<BuyOrder> GetBuyOrders(User user)
         {
             return user.BuyOrders;
+        }
+
+        public void EditBuyOrder(ref User user, int orderIndex, int quantity)
+        {
+            user.EditBuyOrder(orderIndex, quantity);
         }
     }
 
@@ -204,7 +213,9 @@ namespace Common
         string Logout(string nickname, string password);
         Dictionary<Diginote, User> GetMarket();
         float GetQuote();
-        ArrayList GetSaleOrders(User user);
-        ArrayList GetBuyOrders(User user);
+        List<SaleOrder> GetSaleOrders(User user);
+        void EditSaleOrder(ref User user, int orderIndex, int quantity);
+        List<BuyOrder> GetBuyOrders(User user);
+        void EditBuyOrder(ref User user, int orderIndex, int quantity);
     }
 }

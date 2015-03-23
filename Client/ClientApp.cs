@@ -159,8 +159,8 @@ namespace Client
                 Console.WriteLine(result);
                 if (result.Equals("Logout successful!"))
                 {
-                    loggedUser = _iDes.GetUser(nickname);
                     Console.WriteLine("See you soon " + loggedUser.Nickname + "!");
+                    loggedUser = null;
                 }
             }
 
@@ -239,7 +239,7 @@ namespace Client
             {
                 Console.WriteLine("My Sale Orders");
 
-                ArrayList saleOrders = _iDes.GetSaleOrders(loggedUser);
+                List<SaleOrder> saleOrders = _iDes.GetSaleOrders(loggedUser);
 
                 if (saleOrders.Count == 0)
                 {
@@ -254,13 +254,47 @@ namespace Client
                         saleOrderIndex += 1;
                     }
                 }
+
+                Console.WriteLine();
+                string option;
+                do
+                {
+                    Console.Write("Do you want to edit any order's quantity? (Y/N) ");
+                    option = Console.ReadLine();
+                    if (option == "Y" || option == "y")
+                    {
+                        Console.Write("Please enter the order index: ");
+                        int orderIndex = int.Parse(Console.ReadLine()) - 1;
+                        Console.Write("Please enter the new quantity: ");
+                        int quantity = int.Parse(Console.ReadLine());
+
+                        _iDes.EditSaleOrder(ref loggedUser, orderIndex, quantity);
+
+                        break;
+                    }
+                    else
+                    {
+                        if (option != "N" && option != "n")
+                        {
+                            Console.WriteLine("Invalid option!");
+                            option = "INVALID_OPTION";
+                        }
+                    }
+                }
+                while (option == "INVALID_OPTION");
+
+                if(option == "Y" || option == "y")
+                {
+                    Console.WriteLine();
+                    ListSaleOrders();
+                }
             }
 
             public void ListBuyOrders()
             {
                 Console.WriteLine("My Buy Orders");
 
-                ArrayList buyOrders = _iDes.GetBuyOrders(loggedUser);
+                List<BuyOrder> buyOrders = _iDes.GetBuyOrders(loggedUser);
 
                 if (buyOrders.Count == 0)
                 {
@@ -274,6 +308,40 @@ namespace Client
                         Console.WriteLine("Order #" + buyOrderIndex + "'s quantity: " + buyOrder.Quantity);
                         buyOrderIndex += 1;
                     }
+                }
+
+                Console.WriteLine();
+                string option;
+                do
+                {
+                    Console.Write("Do you want to edit any order's quantity? (Y/N) ");
+                    option = Console.ReadLine();
+                    if (option == "Y" || option == "y")
+                    {
+                        Console.Write("Please enter the order index: ");
+                        int orderIndex = int.Parse(Console.ReadLine()) - 1;
+                        Console.Write("Please enter the new quantity: ");
+                        int quantity = int.Parse(Console.ReadLine());
+
+                        _iDes.EditBuyOrder(ref loggedUser, orderIndex, quantity);
+
+                        break;
+                    }
+                    else
+                    {
+                        if (option != "N" && option != "n")
+                        {
+                            Console.WriteLine("Invalid option!");
+                            option = "INVALID_OPTION";
+                        }
+                    }
+                }
+                while (option == "INVALID_OPTION");
+
+                if (option == "Y" || option == "y")
+                {
+                    Console.WriteLine();
+                    ListBuyOrders();
                 }
             }
         }
