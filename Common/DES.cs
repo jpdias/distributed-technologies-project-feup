@@ -1,52 +1,93 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Community.CsharpSqlite.SQLiteClient;
 
 namespace Common
 {
     public class DES : MarshalByRefObject, IDES
     {
-        ArrayList usersList;
+        ArrayList usersList = new ArrayList();
         ArrayList diginotesList;
         Dictionary<Diginote, User> market;
+        SqliteConnection m_dbConnection;
 
         public DES()
         {
+            m_dbConnection = new SqliteConnection("Data Source=db/db.sqlite;Version=3;");
+            m_dbConnection.Open();
+
             Console.WriteLine("Constructor called.");
-            usersList = new ArrayList();
+            usersList = GetUsersArrayList();
             diginotesList = new ArrayList();
             market = new Dictionary<Diginote, User>();
 
-            User user = new User("Joao", "joao", "joao");
-            user.AddBuyOrder(10);
-            usersList.Add(user);
+           // user.AddBuyOrder(10);
+           // usersList.Add(user);
 
             Diginote diginote = new Diginote();
             diginote.Quote = 0.98f;
-            diginotesList.Add(diginote);
-            market.Add(diginote, user);
+          //  diginotesList.Add(diginote);
+          //  market.Add(diginote, user);
 
             diginote = new Diginote();
             diginote.Quote = 1.00f;
             diginotesList.Add(diginote);
             market.Add(diginote, null);
+
+
         }
 
+       
         public override object InitializeLifetimeService()
         {
             return null;
         }
 
+        public ArrayList GetUsersArrayList()
+        {
+            ArrayList result = new ArrayList();
+            string sql = "SELECT * FROM MarketUsers";
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                SqliteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    result.Add(new User(reader["username"].ToString(), reader["nickname"].ToString(), reader["password"].ToString()));
+                }
+
+            }
+            catch (Exception e)
+            {
+                
+            }
+            return result;
+        }
         public string AddUser(string name, string nickname, string password)
         {
+
             Console.WriteLine("AddUser called.");
 
-            foreach (User user in usersList)
+         
+            if (usersList != null )
             {
-                if (user.Nickname.Equals(nickname))
-                {
-                    return "Error adding user: Nickname already exists!";
-                }
+                if(usersList.Cast<User>().Any(user => user.Nickname.Equals(nickname)))
+                    return "Error adding user";
+            }
+
+            string sql = String.Format("INSERT INTO MarketUsers ('nickname', 'username', 'password') VALUES ('{0}', '{1}', '{2}')", nickname, name, password);
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "Error adding user to db";
             }
 
             User newUser = new User(name, nickname, password);
@@ -67,10 +108,6 @@ namespace Common
                     {
                         usersList.RemoveAt(userIndex);
                         return "User removed successfully!";
-                    }
-                    else
-                    {
-                        return "Error removing user: Wrong password!";
                     }
                 }
 
