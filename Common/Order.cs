@@ -10,5 +10,6 @@ namespace Common
     abstract public class Order
     {
         public int Quantity { get; set; }
+        public bool Processed { get; set; }
     }
 }

@@ -4,15 +4,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Community.CsharpSqlite.SQLiteClient;
+using System.Timers;
 
 namespace Common
 {
     public class DES : MarshalByRefObject, IDES
     {
-        ArrayList usersList = new ArrayList();
-        ArrayList diginotesList;
+        List<User> usersList;
+        List<Diginote> diginotesList;
         Dictionary<Diginote, User> market;
+        Dictionary<SaleOrder, User> saleOrders;
+        Dictionary<BuyOrder, User> buyOrders;
         SqliteConnection m_dbConnection;
+        Timer timer;
 
         public DES()
         {
@@ -20,35 +24,83 @@ namespace Common
             m_dbConnection.Open();
 
             Console.WriteLine("Constructor called.");
-            usersList = GetUsersArrayList();
-            diginotesList = new ArrayList();
+            usersList = GetUsersListFromDb();
+            diginotesList = new List<Diginote>();
             market = new Dictionary<Diginote, User>();
-
-           // user.AddBuyOrder(10);
-           // usersList.Add(user);
+            saleOrders = new Dictionary<SaleOrder, User>();
+            buyOrders = new Dictionary<BuyOrder, User>();
 
             Diginote diginote = new Diginote();
             diginote.Quote = 0.98f;
-          //  diginotesList.Add(diginote);
-          //  market.Add(diginote, user);
+            diginotesList.Add(diginote);
+
+            market.Add(diginote, (User) usersList[0]);
 
             diginote = new Diginote();
             diginote.Quote = 1.00f;
             diginotesList.Add(diginote);
-            market.Add(diginote, null);
 
+            market.Add(diginote, (User) usersList[0]);
 
+            timer = new Timer();
+            timer.Elapsed += new ElapsedEventHandler(updateEvent);
+            timer.Interval = 1000; // in miliseconds
+            timer.Enabled = true;
+            timer.Start();
         }
 
-       
+        private void updateEvent(object sender, ElapsedEventArgs e)
+        {
+            User seller;
+            User buyer;
+
+            foreach (var saleOrder in saleOrders)
+            {
+                seller = saleOrder.Value;
+
+                if (saleOrder.Key.Processed == false)
+                {
+                    foreach (var buyOrder in buyOrders)
+                    {
+                        if (buyOrder.Key.Processed == false)
+                        {
+                            buyer = buyOrder.Value;
+
+                            if (seller.Nickname != buyer.Nickname)
+                            {
+                                if (saleOrder.Key.Quantity == buyOrder.Key.Quantity)
+                                {
+                                    int numTransations = 0;
+
+                                    while (numTransations != saleOrder.Key.Quantity)
+                                    {
+                                        List<Diginote> sellerDiginotes = GetDiginotes(ref seller);
+                                        market[sellerDiginotes[0]] = buyer;
+                                        numTransations += 1;
+                                    }
+
+                                    saleOrder.Key.Processed = true;
+                                    buyOrder.Key.Processed = true;
+
+                                    Console.WriteLine(saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         public override object InitializeLifetimeService()
         {
             return null;
         }
 
-        public ArrayList GetUsersArrayList()
+        public List<User> GetUsersListFromDb()
         {
-            ArrayList result = new ArrayList();
+            List<User> result = new List<User>();
             string sql = "SELECT * FROM MarketUsers";
             try
             {
@@ -66,11 +118,10 @@ namespace Common
             }
             return result;
         }
+
         public string AddUser(string name, string nickname, string password)
         {
-
             Console.WriteLine("AddUser called.");
-
          
             if (usersList != null )
             {
@@ -117,7 +168,7 @@ namespace Common
             return "Error removing user: Nickname not found!";
         }
 
-        public ArrayList GetUsersList()
+        public List<User> GetUsersList()
         {
             Console.WriteLine("GetUsersList called.");
             return usersList;
@@ -208,9 +259,9 @@ namespace Common
             float quote = 0.0f;
             int numDiginotes = 0;
 
-            foreach (var entry in market)
+            foreach (var diginote in market)
             {
-                quote += entry.Key.Quote;
+                quote += diginote.Key.Quote;
                 numDiginotes += 1;
             }
 
@@ -219,24 +270,108 @@ namespace Common
             return quote;
         }
 
-        public List<SaleOrder> GetSaleOrders(User user)
+        public List<SaleOrder> GetSaleOrders(ref User user)
         {
-            return user.SaleOrders;
+            List<SaleOrder> userSaleOrders = new List<SaleOrder>();
+
+            foreach (var saleOrder in saleOrders)
+            {
+                if(saleOrder.Value.Nickname.Equals(user.Nickname))
+                {
+                    userSaleOrders.Add(saleOrder.Key);
+                }
+            }
+
+            return userSaleOrders;
+        }
+
+        public string AddSaleOrder(ref User user, int quantity)
+        {
+            if (GetDiginotes(ref user).Count >= quantity)
+            {
+                saleOrders.Add(new SaleOrder(quantity), user);
+
+                return "New sale order added successfully!";
+            }
+            else
+            {
+                return "Error: you do not have enough diginotes!";
+            }
         }
         
         public void EditSaleOrder(ref User user, int orderIndex, int quantity)
         {
-            user.EditSaleOrder(orderIndex, quantity);
+            int tmpOrderIndex = 0;
+
+            foreach (var saleOrder in saleOrders)
+            {
+                if (saleOrder.Value.Nickname.Equals(user.Nickname))
+                {
+                    if (tmpOrderIndex == orderIndex)
+                    {
+                        saleOrder.Key.Quantity = quantity;
+
+                        break;
+                    }
+
+                    tmpOrderIndex += 1;
+                }
+            }
         }
 
-        public List<BuyOrder> GetBuyOrders(User user)
+        public List<BuyOrder> GetBuyOrders(ref User user)
         {
-            return user.BuyOrders;
+            List<BuyOrder> userBuyOrders = new List<BuyOrder>();
+
+            foreach (var buyOrder in buyOrders)
+            {
+                if (buyOrder.Value.Nickname.Equals(user.Nickname))
+                {
+                    userBuyOrders.Add(buyOrder.Key);
+                }
+            }
+
+            return userBuyOrders;
+        }
+
+        public void AddBuyOrder(ref User user, int quantity)
+        {
+            buyOrders.Add(new BuyOrder(quantity), user);
         }
 
         public void EditBuyOrder(ref User user, int orderIndex, int quantity)
         {
-            user.EditBuyOrder(orderIndex, quantity);
+            int tmpOrderIndex = 0;
+
+            foreach (var buyOrder in buyOrders)
+            {
+                if (buyOrder.Value.Nickname.Equals(user.Nickname))
+                {
+                    if (tmpOrderIndex == orderIndex)
+                    {
+                        buyOrder.Key.Quantity = quantity;
+
+                        break;
+                    }
+
+                    tmpOrderIndex += 1;
+                }
+            }
+        }
+
+        public List<Diginote> GetDiginotes(ref User user)
+        {
+            List<Diginote> diginotes = new List<Diginote>();
+
+            foreach (var diginote in market)
+            {
+                if (diginote.Value.Nickname.Equals(user.Nickname))
+                {
+                    diginotes.Add(diginote.Key);
+                }
+            }
+
+            return diginotes;
         }
     }
 
@@ -244,15 +379,18 @@ namespace Common
     {
         string AddUser(string name, string nickname, string password);
         string RemoveUser(string nickname, string password);
-        ArrayList GetUsersList();
+        List<User> GetUsersList();
         string Login(string nickname, string password);
         User GetUser(string nickname);
         string Logout(string nickname, string password);
         Dictionary<Diginote, User> GetMarket();
         float GetQuote();
-        List<SaleOrder> GetSaleOrders(User user);
+        string AddSaleOrder(ref User user, int quantity);
+        List<SaleOrder> GetSaleOrders(ref User user);
         void EditSaleOrder(ref User user, int orderIndex, int quantity);
-        List<BuyOrder> GetBuyOrders(User user);
+        List<BuyOrder> GetBuyOrders(ref User user);
+        void AddBuyOrder(ref User user, int quantity);
         void EditBuyOrder(ref User user, int orderIndex, int quantity);
+        List<Diginote> GetDiginotes(ref User user);
     }
 }
