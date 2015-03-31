@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using Community.CsharpSqlite.SQLiteClient;
 using System.Timers;
+using System.IO;
 
 namespace Common
 {
@@ -82,7 +83,9 @@ namespace Common
                                     saleOrder.Key.Processed = true;
                                     buyOrder.Key.Processed = true;
 
-                                    Console.WriteLine(saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                    StreamWriter file = new StreamWriter(@"c:\log.txt");
+                                    file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                    file.Close();
 
                                     break;
                                 }
