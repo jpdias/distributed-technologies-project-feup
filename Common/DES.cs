@@ -83,16 +83,74 @@ namespace Common
                                     saleOrder.Key.Processed = true;
                                     buyOrder.Key.Processed = true;
 
-                                    StreamWriter file = new StreamWriter(@"c:\log.txt");
+                                    StreamWriter file = new StreamWriter(@"c:\log.txt", true);
                                     file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                     file.Close();
 
                                     break;
                                 }
+                                else
+                                {
+                                    if (saleOrder.Key.Quantity < buyOrder.Key.Quantity)
+                                    {
+                                        int numTransations = 0;
+
+                                        while (numTransations != saleOrder.Key.Quantity)
+                                        {
+                                            List<Diginote> sellerDiginotes = GetDiginotes(ref seller);
+                                            market[sellerDiginotes[0]] = buyer;
+                                            numTransations += 1;
+                                        }
+
+                                        buyOrder.Key.Quantity -= numTransations;
+                                        saleOrder.Key.Processed = true;
+                                        buyOrder.Key.Processed = false;
+
+                                        StreamWriter file = new StreamWriter(@"c:\log.txt", true);
+                                        file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                        file.Close();
+
+                                        break;
+                                    }
+                                    else
+                                    {
+                                        if (saleOrder.Key.Quantity > buyOrder.Key.Quantity)
+                                        {
+                                            int numTransations = 0;
+
+                                            while (numTransations != buyOrder.Key.Quantity)
+                                            {
+                                                List<Diginote> sellerDiginotes = GetDiginotes(ref seller);
+                                                market[sellerDiginotes[0]] = buyer;
+                                                numTransations += 1;
+                                            }
+
+                                            saleOrder.Key.Quantity -= numTransations;
+                                            saleOrder.Key.Processed = false;
+                                            buyOrder.Key.Processed = true;
+
+                                            StreamWriter file = new StreamWriter(@"c:\log.txt", true);
+                                            file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                            file.Close();
+
+                                            break;
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
+            }
+
+            updateQuote();
+        }
+
+        public void updateQuote()
+        {
+            foreach (var diginote in market)
+            {
+                diginote.Key.Quote = 1.0f;
             }
         }
         
@@ -260,15 +318,16 @@ namespace Common
         public float GetQuote()
         {
             float quote = 0.0f;
+            float quoteSum = 0.0f;
             int numDiginotes = 0;
 
             foreach (var diginote in market)
             {
-                quote += diginote.Key.Quote;
+                quoteSum += diginote.Key.Quote;
                 numDiginotes += 1;
             }
 
-            quote = quote / numDiginotes;
+            quote = quoteSum / numDiginotes;
 
             return quote;
         }
@@ -302,7 +361,7 @@ namespace Common
             }
         }
         
-        public void EditSaleOrder(ref User user, int orderIndex, int quantity)
+        public string EditSaleOrder(ref User user, int orderIndex, int quantity)
         {
             int tmpOrderIndex = 0;
 
@@ -312,14 +371,23 @@ namespace Common
                 {
                     if (tmpOrderIndex == orderIndex)
                     {
-                        saleOrder.Key.Quantity = quantity;
+                        if(saleOrder.Key.Processed == false)
+                        {
+                            saleOrder.Key.Quantity = quantity;
 
-                        break;
+                            return "Sale order edited successfully!";
+                        }
+                        else
+                        {
+                            return "Error: Sale order already processed!";
+                        }
                     }
 
                     tmpOrderIndex += 1;
                 }
             }
+
+            return "Sale order edited successfully!";
         }
 
         public List<BuyOrder> GetBuyOrders(ref User user)
@@ -342,7 +410,7 @@ namespace Common
             buyOrders.Add(new BuyOrder(quantity), user);
         }
 
-        public void EditBuyOrder(ref User user, int orderIndex, int quantity)
+        public string EditBuyOrder(ref User user, int orderIndex, int quantity)
         {
             int tmpOrderIndex = 0;
 
@@ -352,14 +420,23 @@ namespace Common
                 {
                     if (tmpOrderIndex == orderIndex)
                     {
-                        buyOrder.Key.Quantity = quantity;
+                        if (buyOrder.Key.Processed == false)
+                        {
+                            buyOrder.Key.Quantity = quantity;
 
-                        break;
+                            return "Buy order edited successfully!";
+                        }
+                        else
+                        {
+                            return "Error: Buy order already processed!";
+                        }
                     }
 
                     tmpOrderIndex += 1;
                 }
             }
+
+            return "Buy order edited successfully!";
         }
 
         public List<Diginote> GetDiginotes(ref User user)
@@ -390,10 +467,10 @@ namespace Common
         float GetQuote();
         string AddSaleOrder(ref User user, int quantity);
         List<SaleOrder> GetSaleOrders(ref User user);
-        void EditSaleOrder(ref User user, int orderIndex, int quantity);
+        string EditSaleOrder(ref User user, int orderIndex, int quantity);
         List<BuyOrder> GetBuyOrders(ref User user);
         void AddBuyOrder(ref User user, int quantity);
-        void EditBuyOrder(ref User user, int orderIndex, int quantity);
+        string EditBuyOrder(ref User user, int orderIndex, int quantity);
         List<Diginote> GetDiginotes(ref User user);
     }
 }

@@ -306,6 +306,7 @@ namespace Client
                     foreach(Order saleOrder in saleOrders)
                     {
                         Console.WriteLine("Order #" + saleOrderIndex + "'s quantity: " + saleOrder.Quantity);
+                        Console.WriteLine("Processed: " + saleOrder.Processed);
                         saleOrderIndex += 1;
                     }
                 }
@@ -323,7 +324,8 @@ namespace Client
                         Console.Write("Please enter the new quantity: ");
                         int quantity = int.Parse(Console.ReadLine());
 
-                        _iDes.EditSaleOrder(ref loggedUser, orderIndex, quantity);
+                        string result = _iDes.EditSaleOrder(ref loggedUser, orderIndex, quantity);
+                        Console.WriteLine(result);
 
                         break;
                     }
@@ -361,6 +363,7 @@ namespace Client
                     foreach (Order buyOrder in buyOrders)
                     {
                         Console.WriteLine("Order #" + buyOrderIndex + "'s quantity: " + buyOrder.Quantity);
+                        Console.WriteLine("Processed: " + buyOrder.Processed);
                         buyOrderIndex += 1;
                     }
                 }
@@ -378,7 +381,8 @@ namespace Client
                         Console.Write("Please enter the new quantity: ");
                         int quantity = int.Parse(Console.ReadLine());
 
-                        _iDes.EditBuyOrder(ref loggedUser, orderIndex, quantity);
+                        string result = _iDes.EditBuyOrder(ref loggedUser, orderIndex, quantity);
+                        Console.WriteLine(result);
 
                         break;
                     }
