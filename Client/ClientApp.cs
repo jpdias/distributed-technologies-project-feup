@@ -41,8 +41,11 @@ namespace Client
                     {
                         Console.WriteLine("1 - Logout");
                         Console.WriteLine("2 - Market Quote");
-                        Console.WriteLine("3 - My Sale Orders");
-                        Console.WriteLine("4 - My Buy Orders");
+                        Console.WriteLine("3 - My Diginotes");
+                        Console.WriteLine("4 - New Sale Order");
+                        Console.WriteLine("5 - New Buy Order");
+                        Console.WriteLine("6 - My Sale Orders");
+                        Console.WriteLine("7 - My Buy Orders");
                     }
                     Console.WriteLine("0 - Exit");
                     Console.Write("Option: ");
@@ -88,9 +91,21 @@ namespace Client
                                 break;
                             case "3":
                                 Console.WriteLine();
-                                ListSaleOrders();
+                                ListDiginotes();
                                 break;
                             case "4":
+                                Console.WriteLine();
+                                AddSaleOrder();
+                                break;
+                            case "5":
+                                Console.WriteLine();
+                                AddBuyOrder();
+                                break;
+                            case "6":
+                                Console.WriteLine();
+                                ListSaleOrders();
+                                break;
+                            case "7":
                                 Console.WriteLine();
                                 ListBuyOrders();
                                 break;
@@ -168,7 +183,7 @@ namespace Client
             {
                 Console.WriteLine("Users");
 
-                ArrayList users = _iDes.GetUsersList();
+                List<User> users = _iDes.GetUsersList();
 
                 if (users.Count == 0)
                 {
@@ -235,11 +250,51 @@ namespace Client
                 }
             }
 
+            public void ListDiginotes()
+            {
+                Console.WriteLine("My Diginotes");
+
+                List<Diginote> diginotes = _iDes.GetDiginotes(ref loggedUser);
+
+                if (diginotes.Count == 0)
+                {
+                    Console.WriteLine("No diginotes!");
+                }
+                else
+                {
+                    Console.WriteLine("You have " + diginotes.Count + " diginotes!");
+                }
+            }
+
+            public void AddSaleOrder()
+            {
+                Console.WriteLine("New Sale Order");
+
+                Console.Write("Order's quantity: ");
+                int quantity = int.Parse(Console.ReadLine());
+
+                string result = _iDes.AddSaleOrder(ref loggedUser, quantity);
+
+                Console.WriteLine(result);
+            }
+
+            public void AddBuyOrder()
+            {
+                Console.WriteLine("New Buy Order");
+
+                Console.Write("Order's quantity: ");
+                int quantity = int.Parse(Console.ReadLine());
+
+                _iDes.AddBuyOrder(ref loggedUser, quantity);
+
+                Console.WriteLine("New buy order added successfully!");
+            }
+
             public void ListSaleOrders()
             {
                 Console.WriteLine("My Sale Orders");
 
-                List<SaleOrder> saleOrders = _iDes.GetSaleOrders(loggedUser);
+                List<SaleOrder> saleOrders = _iDes.GetSaleOrders(ref loggedUser);
 
                 if (saleOrders.Count == 0)
                 {
@@ -251,6 +306,7 @@ namespace Client
                     foreach(Order saleOrder in saleOrders)
                     {
                         Console.WriteLine("Order #" + saleOrderIndex + "'s quantity: " + saleOrder.Quantity);
+                        Console.WriteLine("Processed: " + saleOrder.Processed);
                         saleOrderIndex += 1;
                     }
                 }
@@ -268,7 +324,8 @@ namespace Client
                         Console.Write("Please enter the new quantity: ");
                         int quantity = int.Parse(Console.ReadLine());
 
-                        _iDes.EditSaleOrder(ref loggedUser, orderIndex, quantity);
+                        string result = _iDes.EditSaleOrder(ref loggedUser, orderIndex, quantity);
+                        Console.WriteLine(result);
 
                         break;
                     }
@@ -294,7 +351,7 @@ namespace Client
             {
                 Console.WriteLine("My Buy Orders");
 
-                List<BuyOrder> buyOrders = _iDes.GetBuyOrders(loggedUser);
+                List<BuyOrder> buyOrders = _iDes.GetBuyOrders(ref loggedUser);
 
                 if (buyOrders.Count == 0)
                 {
@@ -306,6 +363,7 @@ namespace Client
                     foreach (Order buyOrder in buyOrders)
                     {
                         Console.WriteLine("Order #" + buyOrderIndex + "'s quantity: " + buyOrder.Quantity);
+                        Console.WriteLine("Processed: " + buyOrder.Processed);
                         buyOrderIndex += 1;
                     }
                 }
@@ -323,7 +381,8 @@ namespace Client
                         Console.Write("Please enter the new quantity: ");
                         int quantity = int.Parse(Console.ReadLine());
 
-                        _iDes.EditBuyOrder(ref loggedUser, orderIndex, quantity);
+                        string result = _iDes.EditBuyOrder(ref loggedUser, orderIndex, quantity);
+                        Console.WriteLine(result);
 
                         break;
                     }

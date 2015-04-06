@@ -5,4 +5,5 @@ CREATE TABLE MarketUsers(
    password TEXT
 );
 
-INSERT INTO MarketUsers (nickname, username, password) VALUES (`jp`,`jp`,`jp`)
+INSERT INTO MarketUsers (nickname, username, password) VALUES ('jc', 'jc', 'jc');
+INSERT INTO MarketUsers (nickname, username, password) VALUES ('jp', 'jp', 'jp');
