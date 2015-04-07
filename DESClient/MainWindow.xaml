@@ -1,13 +1,30 @@
 ﻿<Window x:Name="MainWindow1" x:Class="DESClient.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:l="clr-namespace:Common;assembly=Common"
         Title="Diginote Exchange System" Height="511" Width="774.5" ResizeMode="CanMinimize" BorderBrush="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}" Icon="Assets/favicon.ico">
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type l:BuyOrder}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Quantity}"/>
+                <TextBlock Text=" "/>
+                <TextBlock Text="{Binding Processed}"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type l:SaleOrder}">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding Quantity}"/>
+                <TextBlock Text=" "/>
+                <TextBlock Text="{Binding Processed}"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
     <Grid Background="#061A1C">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="Title" Margin="0,24,0,385" TextWrapping="Wrap" Text="Diginote Exchange System" FontSize="24" TextAlignment="Center" Foreground="#D7C09C" Grid.Column="1"/>
+        <TextBlock x:Name="Title" Margin="0,24,0,409" TextWrapping="Wrap" Text="Diginote Exchange System" FontSize="24" TextAlignment="Center" Foreground="#D7C09C" Grid.Column="1"/>
         <Grid x:Name="login" Grid.ColumnSpan="2" Grid.Column="0" Margin="164,73,164,30" Visibility="Visible">
             <TextBox x:Name="Username" HorizontalAlignment="Right" Height="38" TextWrapping="Wrap"  VerticalAlignment="Top" Width="290" FontSize="22" Margin="0,82,0,0"/>
             <PasswordBox x:Name="Password" HorizontalAlignment="Right" Height="38" Margin="0,150,0,0" VerticalAlignment="Top" Width="290" FontSize="22"/>
@@ -37,15 +54,33 @@
                     <MenuItem Header="Change PW" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0" Click="Changepw_click" Background="#F5702E" Foreground="#FFECF0F1"/>
                 </MenuItem>
             </Menu>
-            <ListBox x:Name="offers" HorizontalAlignment="Left" Height="281" Margin="376,62,0,0" VerticalAlignment="Top" Width="362" />
-            <Button x:Name="Buy" Content="Buy" Margin="376,348,10,0" VerticalAlignment="Top" Height="46" IsDefault="True" FontSize="22" Background="#F5702E" Foreground="#FFECF0F1" Click="Buy_OnClick"/>
-            <TextBlock HorizontalAlignment="Left" Margin="10,62,0,0" TextWrapping="Wrap" Text="Your Wallet" VerticalAlignment="Top" Height="34" Width="342" FontSize="22" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBlock HorizontalAlignment="Left" Margin="10,116,0,0" TextWrapping="Wrap" Text="Total Notes:" VerticalAlignment="Top" Height="34" Width="164" FontSize="22" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBlock HorizontalAlignment="Left" Margin="10,155,0,0" TextWrapping="Wrap" Text="Value:" VerticalAlignment="Top" Height="34" Width="164" FontSize="22" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBlock x:Name="notes" HorizontalAlignment="Left" Margin="188,116,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="164" FontSize="22" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBlock x:Name="val" HorizontalAlignment="Left" Margin="188,155,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="164" FontSize="22" Foreground="#D7C09C" TextAlignment="Center" />
-            <Button x:Name="Sell" Content="Sell" Margin="9,348,377,0" VerticalAlignment="Top" Height="46" IsDefault="True" FontSize="22" Background="#F5702E" Foreground="#FFECF0F1" Click="Sell_OnClick"/>
+            <ListBox x:Name="buy_list" HorizontalAlignment="Left" Height="150" Margin="376,62,0,0" VerticalAlignment="Top" Width="362" />
+            <TextBlock HorizontalAlignment="Left" Margin="0,6,0,0" TextWrapping="Wrap" Text="My Diginotes:" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
 
+            <TextBlock x:Name="Quantity" HorizontalAlignment="Left" Height="30" Margin="140,7,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="106" FontSize="20" Foreground="#FFF5702E" Background="#FF061A1C"/>
+            <TextBlock HorizontalAlignment="Left" Margin="252,8,0,0" TextWrapping="Wrap" Text="Quote Value:" VerticalAlignment="Top" Height="34" Width="119" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBlock x:Name="StockVal" HorizontalAlignment="Left" Height="30" Margin="376,7,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="106" FontSize="20" Foreground="#FFF5702E" Background="#FF061A1C"/>
+            <ListBox x:Name="sell_list" HorizontalAlignment="Left" Height="162" Margin="376,232,0,0" VerticalAlignment="Top" Width="362" />
+            <Button Content="" HorizontalAlignment="Left" Margin="548,10,0,0" VerticalAlignment="Top" Width="30" Click="Button_Click" Height="27" BorderBrush="{x:Null}" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/refresh.ico"/>
+                </Button.Background>
+            </Button>
+            <Button x:Name="Add_buy" Content="Button" HorizontalAlignment="Left" Margin="320,131,0,0" VerticalAlignment="Top" Width="32" Click="Add_Buy_Click" BorderBrush="{x:Null}" Height="30" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/plus.ico"/>
+                </Button.Background>
+            </Button>
+            <TextBlock HorizontalAlignment="Left" Margin="10,131,0,0" TextWrapping="Wrap" Text="Buy Order:" VerticalAlignment="Top" Height="34" Width="125" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBox x:Name="BuyVal" HorizontalAlignment="Left" Height="30" Margin="140,131,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White"/>
+            <Button x:Name="Add_Sell" Content="Button" HorizontalAlignment="Left" Margin="320,174,0,0" VerticalAlignment="Top" Width="32" Click="Add_Sell_Click" BorderBrush="{x:Null}" Height="30" Foreground="{x:Null}">
+                <Button.Background>
+                    <ImageBrush ImageSource="Assets/plus.ico"/>
+                </Button.Background>
+            </Button>
+            <TextBlock HorizontalAlignment="Left" Margin="10,174,0,0" TextWrapping="Wrap" Text="Sell Order:" VerticalAlignment="Top" Height="34" Width="125" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBox x:Name="Sell_Val" HorizontalAlignment="Left" Height="30" Margin="140,174,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White"/>
+            <TextBlock x:Name="InfoBox_Dash" HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="342" TextAlignment="Center" FontSize="18" Foreground="#FFF5702E" />
         </Grid>
 
     </Grid>

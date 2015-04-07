@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using Common;
 
 namespace DESClient
 {
@@ -10,11 +12,22 @@ namespace DESClient
     {
         private string _username;
         private string _password;
-        
+        private User loggedUser;
+
         public MainWindow()
         {
             InitializeComponent();
-           
+            
+        }
+
+        private void LoadValues()
+        {
+            Quantity.Text = App.IDes.GetDiginotes(ref loggedUser).Count.ToString();
+            StockVal.Text = App.IDes.GetQuote().ToString();
+            List<SaleOrder> saleOrders = App.IDes.GetSaleOrders(ref loggedUser);
+            sell_list.ItemsSource = saleOrders;
+            List<BuyOrder> buyOrders = App.IDes.GetBuyOrders(ref loggedUser);
+            buy_list.ItemsSource = buyOrders;
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -33,6 +46,8 @@ namespace DESClient
                     login.Visibility = Visibility.Hidden;
                     main.Visibility = Visibility.Visible;
                     menu.Header = "Welcome " + user + "!";
+                    loggedUser = App.IDes.GetUser(user);
+                    LoadValues();
                 }
                 else
                     infobox.Text = status;
@@ -61,6 +76,8 @@ namespace DESClient
                         _username = user;
                         _password = password;
                         show_dashboard();
+                        loggedUser = App.IDes.GetUser(user);
+                        LoadValues();
                         
                     }
                     else
@@ -126,6 +143,24 @@ namespace DESClient
         private void Sell_OnClick(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LoadValues();
+        }
+
+        private void Add_Sell_Click(object sender, RoutedEventArgs e)
+        {
+            string result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(Sell_Val.Text));
+            InfoBox_Dash.Text = result;
+        }
+
+        private void Add_Buy_Click(object sender, RoutedEventArgs e)
+        {
+            //string result = 
+            App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
+            InfoBox_Dash.Text = "Buy order added!"; //TODO: Return error text
         }
     }
 }
