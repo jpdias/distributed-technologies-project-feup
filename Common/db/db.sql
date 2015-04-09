@@ -5,5 +5,18 @@ CREATE TABLE MarketUsers(
    password TEXT
 );
 
-INSERT INTO MarketUsers (nickname, username, password) VALUES ('jc', 'jc', 'jc');
-INSERT INTO MarketUsers (nickname, username, password) VALUES ('jp', 'jp', 'jp');
+CREATE TABLE MarketDiginotes(
+   id INTEGER PRIMARY KEY
+);
+
+CREATE TABLE Market(
+   id INTEGER PRIMARY KEY,
+   diginoteId INTEGER REFERENCES MarketDiginotes(id),
+   userId INTEGER REFERENCES MarketUsers(id)
+);
+
+CREATE TABLE MarketLog(
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   time TEXT,
+   description TEXT
+);

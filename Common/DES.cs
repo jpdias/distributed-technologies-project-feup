@@ -25,23 +25,19 @@ namespace Common
             m_dbConnection.Open();
 
             Console.WriteLine("Constructor called.");
-            usersList = GetUsersListFromDb();
+            usersList = new List<User>();
             diginotesList = new List<Diginote>();
             market = new Dictionary<Diginote, User>();
             saleOrders = new Dictionary<SaleOrder, User>();
             buyOrders = new Dictionary<BuyOrder, User>();
 
-            Diginote diginote = new Diginote();
-            diginote.Quote = 0.98f;
-            diginotesList.Add(diginote);
+            AddUser("jc", "jc", "jc");
+            AddUser("jp", "jp", "jp");
 
-            market.Add(diginote, (User) usersList[0]);
-
-            diginote = new Diginote();
-            diginote.Quote = 1.00f;
-            diginotesList.Add(diginote);
-
-            market.Add(diginote, (User) usersList[0]);
+            usersList = GetUsersListFromDb();
+            diginotesList = GetDiginotesListFromDb();
+            market = GetMarketFromDb();
+            market = GetMarket();
 
             timer = new Timer();
             timer.Elapsed += new ElapsedEventHandler(updateEvent);
@@ -83,9 +79,24 @@ namespace Common
                                     saleOrder.Key.Processed = true;
                                     buyOrder.Key.Processed = true;
 
+                                    /*
+                                    // Write to log text file
                                     StreamWriter file = new StreamWriter(@"c:\log.txt", true);
                                     file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                     file.Close();
+                                    */
+
+                                    // Write to db log file
+                                    string sql = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                    try
+                                    {
+                                        SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                        command.ExecuteNonQuery();
+                                    }
+                                    catch (Exception exception)
+                                    {
+                                        Console.WriteLine(exception);
+                                    }
 
                                     break;
                                 }
@@ -106,9 +117,24 @@ namespace Common
                                         saleOrder.Key.Processed = true;
                                         buyOrder.Key.Processed = false;
 
+                                        /*
+                                        // Write to log text file
                                         StreamWriter file = new StreamWriter(@"c:\log.txt", true);
                                         file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                         file.Close();
+                                        */
+
+                                        // Write to db log file
+                                        string sql = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                        try
+                                        {
+                                            SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                            command.ExecuteNonQuery();
+                                        }
+                                        catch (Exception exception)
+                                        {
+                                            Console.WriteLine(exception);
+                                        }
 
                                         break;
                                     }
@@ -129,9 +155,24 @@ namespace Common
                                             saleOrder.Key.Processed = false;
                                             buyOrder.Key.Processed = true;
 
+                                            /*
+                                            // Write to log text file
                                             StreamWriter file = new StreamWriter(@"c:\log.txt", true);
                                             file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                             file.Close();
+                                            */
+
+                                            // Write to db log file
+                                            string sql = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                            try
+                                            {
+                                                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                                command.ExecuteNonQuery();
+                                            }
+                                            catch (Exception exception)
+                                            {
+                                                Console.WriteLine(exception);
+                                            }
 
                                             break;
                                         }
@@ -177,18 +218,60 @@ namespace Common
             {
                 
             }
+
+            return result;
+        }
+
+        public List<Diginote> GetDiginotesListFromDb()
+        {
+            List<Diginote> result = new List<Diginote>();
+            string sql = "SELECT * FROM MarketDiginotes";
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                SqliteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    result.Add(new Diginote());
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return result;
+        }
+
+        public Dictionary<Diginote, User> GetMarketFromDb()
+        {
+            Dictionary<Diginote, User> result = new Dictionary<Diginote, User>();
+            string sql = "SELECT * FROM Market";
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                SqliteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    int diginoteId = reader.GetInt32(1);
+                    int userId = reader.GetInt32(2);
+                    result.Add(diginotesList[diginoteId - 1], usersList[userId - 1]);
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+
             return result;
         }
 
         public string AddUser(string name, string nickname, string password)
         {
             Console.WriteLine("AddUser called.");
-         
-            if (usersList != null )
-            {
-                if(usersList.Cast<User>().Any(user => user.Nickname.Equals(nickname)))
-                    return "Error adding user";
-            }
+
+            User newUser = new User(name, nickname, password);
+            usersList.Add(newUser);
 
             string sql = String.Format("INSERT INTO MarketUsers ('nickname', 'username', 'password') VALUES ('{0}', '{1}', '{2}')", nickname, name, password);
             try
@@ -199,12 +282,52 @@ namespace Common
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                return "Error adding user to db";
+                return "Error adding user to db!";
             }
 
-            User newUser = new User(name, nickname, password);
-            usersList.Add(newUser);
+            // Give 10 Diginotes to this user
+            for (int i = 0; i < 10; i++)
+            {
+                AddDiginote(usersList.Count);
+            }
+
             return "User added successfully!";
+        }
+
+        public string AddDiginote(int userId)
+        {
+            Console.WriteLine("AddDiginote called.");
+
+            Diginote diginote = new Diginote(diginotesList.Count + 1);
+            diginotesList.Add(diginote);
+
+            string sql = String.Format("INSERT INTO MarketDiginotes ('id') VALUES ('{0}')", diginote.Id);
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "Error adding diginote to db!";
+            }
+
+            market.Add(diginotesList[diginote.Id - 1], usersList[userId - 1]);
+
+            sql = String.Format("INSERT INTO Market ('diginoteId', 'userId') VALUES ('{0}', '{1}')", diginote.Id, userId);
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "Error adding diginote to db!";
+            }
+
+            return "Diginote added successfully!";
         }
 
         public string RemoveUser(string nickname, string password)
@@ -405,9 +528,11 @@ namespace Common
             return userBuyOrders;
         }
 
-        public void AddBuyOrder(ref User user, int quantity)
+        public string AddBuyOrder(ref User user, int quantity)
         {
             buyOrders.Add(new BuyOrder(quantity), user);
+
+            return "New buy order added successfully!";
         }
 
         public string EditBuyOrder(ref User user, int orderIndex, int quantity)
@@ -469,7 +594,7 @@ namespace Common
         List<SaleOrder> GetSaleOrders(ref User user);
         string EditSaleOrder(ref User user, int orderIndex, int quantity);
         List<BuyOrder> GetBuyOrders(ref User user);
-        void AddBuyOrder(ref User user, int quantity);
+        string AddBuyOrder(ref User user, int quantity);
         string EditBuyOrder(ref User user, int orderIndex, int quantity);
         List<Diginote> GetDiginotes(ref User user);
     }

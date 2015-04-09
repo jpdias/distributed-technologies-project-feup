@@ -15,6 +15,13 @@ namespace Common
             this.Id = Serial;
             this.Quote = 1.0f;
         }
+
+        public Diginote(int id)
+        {
+            this.Id = id;
+            this.Quote = 1.0f;
+        }
+
         public override string ToString()
         {
             return "Diginote's" + " " + "#" + Id + " " + "quote: " + Quote + "€";

@@ -158,9 +158,8 @@ namespace DESClient
 
         private void Add_Buy_Click(object sender, RoutedEventArgs e)
         {
-           
-            App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
-            InfoBox_Dash.Text = "Buy order added!"; //TODO: Return error text
+            string result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
+            InfoBox_Dash.Text = result;
         }
     }
 }
