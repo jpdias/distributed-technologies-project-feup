@@ -161,5 +161,6 @@ namespace DESClient
             string result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
             InfoBox_Dash.Text = result;
         }
+
     }
 }
