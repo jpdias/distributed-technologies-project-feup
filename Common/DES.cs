@@ -73,6 +73,18 @@ namespace Common
                                     {
                                         List<Diginote> sellerDiginotes = GetDiginotes(ref seller);
                                         market[sellerDiginotes[0]] = buyer;
+
+                                        string sql = String.Format("UPDATE Market SET userId = '{0}' WHERE diginoteId = '{1}'", buyer.Id, sellerDiginotes[0].Id);
+                                        try
+                                        {
+                                            SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                            command.ExecuteNonQuery();
+                                        }
+                                        catch (Exception exception)
+                                        {
+                                            Console.WriteLine(exception);
+                                        }
+
                                         numTransations += 1;
                                     }
 
@@ -87,10 +99,10 @@ namespace Common
                                     */
 
                                     // Write to db log file
-                                    string sql = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                    string sql_log = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                     try
                                     {
-                                        SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                        SqliteCommand command = new SqliteCommand(sql_log, m_dbConnection);
                                         command.ExecuteNonQuery();
                                     }
                                     catch (Exception exception)
@@ -110,6 +122,18 @@ namespace Common
                                         {
                                             List<Diginote> sellerDiginotes = GetDiginotes(ref seller);
                                             market[sellerDiginotes[0]] = buyer;
+
+                                            string sql = String.Format("UPDATE Market SET userId = '{0}' WHERE diginoteId = '{1}'", buyer.Id, sellerDiginotes[0].Id);
+                                            try
+                                            {
+                                                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                                command.ExecuteNonQuery();
+                                            }
+                                            catch (Exception exception)
+                                            {
+                                                Console.WriteLine(exception);
+                                            }
+
                                             numTransations += 1;
                                         }
 
@@ -125,10 +149,10 @@ namespace Common
                                         */
 
                                         // Write to db log file
-                                        string sql = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                        string sql_log = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                         try
                                         {
-                                            SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                            SqliteCommand command = new SqliteCommand(sql_log, m_dbConnection);
                                             command.ExecuteNonQuery();
                                         }
                                         catch (Exception exception)
@@ -148,6 +172,18 @@ namespace Common
                                             {
                                                 List<Diginote> sellerDiginotes = GetDiginotes(ref seller);
                                                 market[sellerDiginotes[0]] = buyer;
+
+                                                string sql = String.Format("UPDATE Market SET userId = '{0}' WHERE diginoteId = '{1}'", buyer.Id, sellerDiginotes[0].Id);
+                                                try
+                                                {
+                                                    SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                                    command.ExecuteNonQuery();
+                                                }
+                                                catch (Exception exception)
+                                                {
+                                                    Console.WriteLine(exception);
+                                                }
+
                                                 numTransations += 1;
                                             }
 
@@ -163,10 +199,10 @@ namespace Common
                                             */
 
                                             // Write to db log file
-                                            string sql = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
+                                            string sql_log = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                             try
                                             {
-                                                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                                                SqliteCommand command = new SqliteCommand(sql_log, m_dbConnection);
                                                 command.ExecuteNonQuery();
                                             }
                                             catch (Exception exception)
@@ -210,7 +246,7 @@ namespace Common
                 SqliteDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    result.Add(new User(reader["username"].ToString(), reader["nickname"].ToString(), reader["password"].ToString()));
+                    result.Add(new User(reader.GetInt32(0), reader["username"].ToString(), reader["nickname"].ToString(), reader["password"].ToString()));
                 }
 
             }
@@ -232,7 +268,7 @@ namespace Common
                 SqliteDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    result.Add(new Diginote());
+                    result.Add(new Diginote(reader.GetInt32(0)));
                 }
             }
             catch (Exception e)
@@ -270,38 +306,47 @@ namespace Common
         {
             Console.WriteLine("AddUser called.");
 
-            User newUser = new User(name, nickname, password);
-            usersList.Add(newUser);
-
-            string sql = String.Format("INSERT INTO MarketUsers ('nickname', 'username', 'password') VALUES ('{0}', '{1}', '{2}')", nickname, name, password);
-            try
+            if ((usersList.Any(p => p.Nickname == nickname)) == false)
             {
-                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return "Error adding user to db!";
-            }
+                User newUser = new User(name, nickname, password);
+                usersList.Add(newUser);
 
-            // Give 10 Diginotes to this user
-            for (int i = 0; i < 10; i++)
-            {
-                AddDiginote(usersList.Count);
-            }
+                string sql = String.Format("INSERT INTO MarketUsers ('id', 'nickname', 'username', 'password') VALUES ('{0}', '{1}', '{2}', '{3}')", newUser.Id, nickname, name, password);
+                try
+                {
+                    SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return "Error adding user to db!";
+                }
 
-            return "User added successfully!";
+                // Give 10 Diginotes to the new user
+                for (int i = 0; i < 10; i++)
+                {
+                    AddDiginote(usersList.Count);
+                }
+
+                return "User added successfully!";
+            }
+            else
+            {
+                Console.WriteLine("Print A!");
+
+                return "Username already exists!";
+            }
         }
 
         public string AddDiginote(int userId)
         {
             Console.WriteLine("AddDiginote called.");
 
-            Diginote diginote = new Diginote(diginotesList.Count + 1);
-            diginotesList.Add(diginote);
+            Diginote newDiginote = new Diginote();
+            diginotesList.Add(newDiginote);
 
-            string sql = String.Format("INSERT INTO MarketDiginotes ('id') VALUES ('{0}')", diginote.Id);
+            string sql = String.Format("INSERT INTO MarketDiginotes ('id') VALUES ('{0}')", newDiginote.Id);
             try
             {
                 SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
@@ -313,9 +358,9 @@ namespace Common
                 return "Error adding diginote to db!";
             }
 
-            market.Add(diginotesList[diginote.Id - 1], usersList[userId - 1]);
+            market.Add(diginotesList[newDiginote.Id - 1], usersList[userId - 1]);
 
-            sql = String.Format("INSERT INTO Market ('diginoteId', 'userId') VALUES ('{0}', '{1}')", diginote.Id, userId);
+            sql = String.Format("INSERT INTO Market ('diginoteId', 'userId') VALUES ('{0}', '{1}')", newDiginote.Id, userId);
             try
             {
                 SqliteCommand command = new SqliteCommand(sql, m_dbConnection);

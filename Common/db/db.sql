@@ -1,5 +1,5 @@
 CREATE TABLE MarketUsers(
-   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   id INTEGER PRIMARY KEY,
    nickname TEXT,
    username TEXT,
    password TEXT
