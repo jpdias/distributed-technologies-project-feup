@@ -162,5 +162,6 @@ namespace DESClient
             App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
             InfoBox_Dash.Text = "Buy order added!"; //TODO: Return error text
         }
+
     }
 }

@@ -3,22 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Common;assembly=Common"
         Title="Diginote Exchange System" Height="511" Width="774.5" ResizeMode="CanMinimize" BorderBrush="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}" Icon="Assets/favicon.ico">
-    <Window.Resources>
-        <DataTemplate DataType="{x:Type l:BuyOrder}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Quantity}"/>
-                <TextBlock Text=" "/>
-                <TextBlock Text="{Binding Processed}"/>
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type l:SaleOrder}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Text="{Binding Quantity}"/>
-                <TextBlock Text=" "/>
-                <TextBlock Text="{Binding Processed}"/>
-            </StackPanel>
-        </DataTemplate>
-    </Window.Resources>
     <Grid Background="#061A1C">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
@@ -54,13 +38,27 @@
                     <MenuItem Header="Change PW" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0" Click="Changepw_click" Background="#F5702E" Foreground="#FFECF0F1"/>
                 </MenuItem>
             </Menu>
-            <ListBox x:Name="buy_list" HorizontalAlignment="Left" Height="150" Margin="376,62,0,0" VerticalAlignment="Top" Width="362" />
-            <TextBlock HorizontalAlignment="Left" Margin="0,6,0,0" TextWrapping="Wrap" Text="My Diginotes:" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <DataGrid x:Name="buy_list" CanUserReorderColumns="False" CanUserResizeRows="False" HorizontalAlignment="Left" Height="126" Margin="376,78,0,0" VerticalAlignment="Top" Width="360" MaxColumnWidth="160" MinColumnWidth="160" CanUserResizeColumns="False" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Quantity"
+                            Binding="{Binding Quantity}" />
+                    <DataGridTextColumn  Header="Status"
+                            Binding="{Binding Processed}" />
+                </DataGrid.Columns>
+            </DataGrid>
+            <DataGrid x:Name="sell_list" CanUserReorderColumns="False" CanUserResizeRows="False" HorizontalAlignment="Left" Height="149" Margin="376,243,0,0" VerticalAlignment="Top" Width="360" MaxColumnWidth="160" MinColumnWidth="160" CanUserResizeColumns="False" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Quantity"
+                            Binding="{Binding Quantity}"/>
+                    <DataGridTextColumn Header="Status"
+                            Binding="{Binding Processed}"/>
+                </DataGrid.Columns>
+            </DataGrid>
 
+            <TextBlock HorizontalAlignment="Left" Margin="0,6,0,0" TextWrapping="Wrap" Text="My Diginotes:" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
             <TextBlock x:Name="Quantity" HorizontalAlignment="Left" Height="30" Margin="140,7,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="106" FontSize="20" Foreground="#FFF5702E" Background="#FF061A1C"/>
             <TextBlock HorizontalAlignment="Left" Margin="252,8,0,0" TextWrapping="Wrap" Text="Quote Value:" VerticalAlignment="Top" Height="34" Width="119" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
             <TextBlock x:Name="StockVal" HorizontalAlignment="Left" Height="30" Margin="376,7,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="106" FontSize="20" Foreground="#FFF5702E" Background="#FF061A1C"/>
-            <ListBox x:Name="sell_list" HorizontalAlignment="Left" Height="162" Margin="376,232,0,0" VerticalAlignment="Top" Width="362" />
             <Button Content="" HorizontalAlignment="Left" Margin="548,10,0,0" VerticalAlignment="Top" Width="30" Click="Button_Click" Height="27" BorderBrush="{x:Null}" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/refresh.ico"/>
@@ -81,6 +79,8 @@
             <TextBlock HorizontalAlignment="Left" Margin="10,174,0,0" TextWrapping="Wrap" Text="Sell Order:" VerticalAlignment="Top" Height="34" Width="125" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
             <TextBox x:Name="Sell_Val" HorizontalAlignment="Left" Height="30" Margin="140,174,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White"/>
             <TextBlock x:Name="InfoBox_Dash" HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="342" TextAlignment="Center" FontSize="18" Foreground="#FFF5702E" />
+            <TextBlock HorizontalAlignment="Left" Margin="471,45,0,0" TextWrapping="Wrap" Text="Buy Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBlock HorizontalAlignment="Left" Margin="471,209,0,0" TextWrapping="Wrap" Text="Sell Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
         </Grid>
     </Grid>
 </Window>
