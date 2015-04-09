@@ -91,12 +91,10 @@ namespace Common
                                     saleOrder.Key.Processed = true;
                                     buyOrder.Key.Processed = true;
 
-                                    /*
                                     // Write to log text file
-                                    StreamWriter file = new StreamWriter(@"c:\log.txt", true);
+                                    StreamWriter file = new StreamWriter(@"log.txt", true);
                                     file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                     file.Close();
-                                    */
 
                                     // Write to db log file
                                     string sql_log = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
@@ -141,12 +139,10 @@ namespace Common
                                         saleOrder.Key.Processed = true;
                                         buyOrder.Key.Processed = false;
 
-                                        /*
                                         // Write to log text file
-                                        StreamWriter file = new StreamWriter(@"c:\log.txt", true);
+                                        StreamWriter file = new StreamWriter(@"log.txt", true);
                                         file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                         file.Close();
-                                        */
 
                                         // Write to db log file
                                         string sql_log = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
@@ -191,12 +187,10 @@ namespace Common
                                             saleOrder.Key.Processed = false;
                                             buyOrder.Key.Processed = true;
 
-                                            /*
                                             // Write to log text file
-                                            StreamWriter file = new StreamWriter(@"c:\log.txt", true);
+                                            StreamWriter file = new StreamWriter(@"log.txt", true);
                                             file.WriteLine(string.Format("{0:HH:mm:ss tt}", DateTime.Now) + saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
                                             file.Close();
-                                            */
 
                                             // Write to db log file
                                             string sql_log = String.Format("INSERT INTO MarketLog ('time', 'description') VALUES ('{0}', '{1}')", string.Format("{0:HH:mm:ss tt}", DateTime.Now), saleOrder.Key.Quantity + " diginotes transferred from " + seller.Nickname + " to " + buyer.Nickname);
