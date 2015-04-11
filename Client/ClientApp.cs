@@ -285,9 +285,9 @@ namespace Client
                 Console.Write("Order's quantity: ");
                 int quantity = int.Parse(Console.ReadLine());
 
-                _iDes.AddBuyOrder(ref loggedUser, quantity);
+                string result = _iDes.AddBuyOrder(ref loggedUser, quantity);
 
-                Console.WriteLine("New buy order added successfully!");
+                Console.WriteLine(result);
             }
 
             public void ListSaleOrders()
@@ -305,7 +305,7 @@ namespace Client
                     var saleOrderIndex = 1;
                     foreach(Order saleOrder in saleOrders)
                     {
-                        Console.WriteLine("Order #" + saleOrderIndex + "'s quantity: " + saleOrder.Quantity);
+                        Console.WriteLine("Id: " + saleOrderIndex + "; " + "Quantity: " + saleOrder.Quantity + "; " + "Value: " + saleOrder.Value);
                         Console.WriteLine("Processed: " + saleOrder.Processed);
                         saleOrderIndex += 1;
                     }
@@ -315,16 +315,22 @@ namespace Client
                 string option;
                 do
                 {
-                    Console.Write("Do you want to edit any order's quantity? (Y/N) ");
+                    Console.Write("Do you want to edit any order's value (must be less or equal than current quote)? (Y/N) ");
                     option = Console.ReadLine();
                     if (option == "Y" || option == "y")
                     {
-                        Console.Write("Please enter the order index: ");
-                        int orderIndex = int.Parse(Console.ReadLine()) - 1;
-                        Console.Write("Please enter the new quantity: ");
-                        int quantity = int.Parse(Console.ReadLine());
+                        Console.Write("Please enter the order id: ");
+                        int orderId = int.Parse(Console.ReadLine());
+                        
+                        float orderValue = 0;
+                        do
+                        {
+                            Console.Write("Please enter the new value: ");
+                            orderValue = float.Parse(Console.ReadLine());
+                        }
+                        while (orderValue > _iDes.GetQuote());
 
-                        string result = _iDes.EditSaleOrder(ref loggedUser, orderIndex, quantity);
+                        string result = _iDes.EditSaleOrder(orderId, orderValue);
                         Console.WriteLine(result);
 
                         break;
@@ -362,7 +368,7 @@ namespace Client
                     var buyOrderIndex = 1;
                     foreach (Order buyOrder in buyOrders)
                     {
-                        Console.WriteLine("Order #" + buyOrderIndex + "'s quantity: " + buyOrder.Quantity);
+                        Console.WriteLine("Id: " + buyOrderIndex + "; " + "Quantity: " + buyOrder.Quantity + "; " + "Value: " + +buyOrder.Value);
                         Console.WriteLine("Processed: " + buyOrder.Processed);
                         buyOrderIndex += 1;
                     }
@@ -372,16 +378,22 @@ namespace Client
                 string option;
                 do
                 {
-                    Console.Write("Do you want to edit any order's quantity? (Y/N) ");
+                    Console.Write("Do you want to edit any order's value (must be greater or equal than current quote)? (Y/N) ");
                     option = Console.ReadLine();
                     if (option == "Y" || option == "y")
                     {
-                        Console.Write("Please enter the order index: ");
-                        int orderIndex = int.Parse(Console.ReadLine()) - 1;
-                        Console.Write("Please enter the new quantity: ");
-                        int quantity = int.Parse(Console.ReadLine());
+                        Console.Write("Please enter the order id: ");
+                        int orderId = int.Parse(Console.ReadLine());
+                        
+                        float orderValue = 0;
+                        do
+                        {
+                            Console.Write("Please enter the new value: ");
+                            orderValue = float.Parse(Console.ReadLine());
+                        }
+                        while (orderValue > _iDes.GetQuote());
 
-                        string result = _iDes.EditBuyOrder(ref loggedUser, orderIndex, quantity);
+                        string result = _iDes.EditBuyOrder(orderId, orderValue);
                         Console.WriteLine(result);
 
                         break;

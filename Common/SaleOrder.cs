@@ -9,9 +9,12 @@ namespace Common
     [Serializable]
     public class SaleOrder : Order
     {
-        public SaleOrder(int quantity)
+        public SaleOrder(int quantity, float value)
         {
+            Serial += 1;
+            this.Id = Serial;
             this.Quantity = quantity;
+            this.Value = value;
         }
     }
 }
