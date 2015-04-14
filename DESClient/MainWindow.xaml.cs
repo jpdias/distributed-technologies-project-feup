@@ -137,12 +137,16 @@ namespace DESClient
 
         private void Buy_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            //idEdited quantEdited valueEdited statusEdited sellValEdited
+            BuyOrder current = (BuyOrder) e.Source;
+            idEdited.Text = current.Id.ToString();
         }
 
         private void Sell_OnClick(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            //idEdited quantEdited valueEdited statusEdited sellValEdited
+            SaleOrder current = (SaleOrder)e.Source;
+            idEdited.Text = current.Id.ToString();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -160,6 +164,11 @@ namespace DESClient
         {
             string result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
             InfoBox_Dash.Text = result;
+        }
+
+        private void change_Click(object sender, RoutedEventArgs e)
+        {
+
         }
 
     }

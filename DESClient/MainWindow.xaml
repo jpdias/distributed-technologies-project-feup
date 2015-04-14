@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:l="clr-namespace:Common;assembly=Common"
-        Title="Diginote Exchange System" Height="511" Width="774.5" ResizeMode="CanMinimize" BorderBrush="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}" Icon="Assets/favicon.ico">
+        Title="Diginote Exchange System" Height="536.5" Width="774.5" ResizeMode="CanMinimize" BorderBrush="{DynamicResource {x:Static SystemColors.DesktopBrushKey}}" Icon="Assets/favicon.ico">
     <Grid Background="#061A1C">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0*"/>
@@ -31,27 +31,35 @@
             <Button x:Name="LoginBack" Content="Login" Margin="59,346,-1,0" VerticalAlignment="Top" Height="46" FontSize="22" Background="#F5702E" Foreground="#FFECF0F1" Click="LoginBack_Click" />
             <Button x:Name="Register" Content="Register" Margin="59,288,0,0" VerticalAlignment="Top" Height="46" IsDefault="True" FontSize="22" Background="#F5702E" Foreground="#FFECF0F1" Click="Register_Click"/>
         </Grid>
-        <Grid x:Name="main" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="404" Margin="10,68,0,0" VerticalAlignment="Top" Width="748" Visibility="Hidden" >
-            <Menu Margin="598,10,10,364" FontSize="14" Background="#F5702E" >
+        <Grid x:Name="main" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="429" Margin="10,68,0,0" VerticalAlignment="Top" Width="748" Visibility="Hidden" >
+            <Menu Margin="598,10,10,392" FontSize="14" Background="#F5702E" >
                 <MenuItem x:Name="menu" Header="User" Height="30" Width="140" Foreground="#FFECF0F1">
                     <MenuItem Header="Logout" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0" Click="logout_click" Background="#F5702E" Foreground="#FFECF0F1"/>
                     <MenuItem Header="Change PW" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0" Click="Changepw_click" Background="#F5702E" Foreground="#FFECF0F1"/>
                 </MenuItem>
             </Menu>
-            <DataGrid x:Name="buy_list" CanUserReorderColumns="False" CanUserResizeRows="False" HorizontalAlignment="Left" Height="126" Margin="376,78,0,0" VerticalAlignment="Top" Width="360" MaxColumnWidth="160" MinColumnWidth="160" CanUserResizeColumns="False" AutoGenerateColumns="False">
+            <DataGrid x:Name="buy_list" CanUserReorderColumns="False" CanUserResizeRows="False" HorizontalAlignment="Left" Height="139" Margin="376,78,0,0" VerticalAlignment="Top" Width="360" MaxColumnWidth="90" MinColumnWidth="90" CanUserResizeColumns="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID"
+                            Binding="{Binding Id}" />
                     <DataGridTextColumn Header="Quantity"
                             Binding="{Binding Quantity}" />
+                    <DataGridTextColumn Header="Value"
+                            Binding="{Binding Value}" />
                     <DataGridTextColumn  Header="Status"
                             Binding="{Binding Processed}" />
                 </DataGrid.Columns>
             </DataGrid>
-            <DataGrid x:Name="sell_list" CanUserReorderColumns="False" CanUserResizeRows="False" HorizontalAlignment="Left" Height="149" Margin="376,243,0,0" VerticalAlignment="Top" Width="360" MaxColumnWidth="160" MinColumnWidth="160" CanUserResizeColumns="False" AutoGenerateColumns="False">
+            <DataGrid x:Name="sell_list" CanUserReorderColumns="False" CanUserResizeRows="False" HorizontalAlignment="Left" Height="168" Margin="376,251,0,0" VerticalAlignment="Top" Width="360" MaxColumnWidth="90" MinColumnWidth="90" CanUserResizeColumns="False" AutoGenerateColumns="False">
                 <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID"
+                            Binding="{Binding Id}" />
                     <DataGridTextColumn Header="Quantity"
-                            Binding="{Binding Quantity}"/>
-                    <DataGridTextColumn Header="Status"
-                            Binding="{Binding Processed}"/>
+                            Binding="{Binding Quantity}" />
+                    <DataGridTextColumn Header="Value"
+                            Binding="{Binding Value}" />
+                    <DataGridTextColumn  Header="Status"
+                            Binding="{Binding Processed}" />
                 </DataGrid.Columns>
             </DataGrid>
 
@@ -70,17 +78,29 @@
                 </Button.Background>
             </Button>
             <TextBlock HorizontalAlignment="Left" Margin="10,131,0,0" TextWrapping="Wrap" Text="Buy Order:" VerticalAlignment="Top" Height="34" Width="125" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBox x:Name="BuyVal" HorizontalAlignment="Left" Height="30" Margin="140,131,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White"/>
+            <TextBox x:Name="BuyVal" HorizontalAlignment="Left" Height="30" Margin="140,131,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White" TextAlignment="Right"/>
             <Button x:Name="Add_Sell" Content="Button" HorizontalAlignment="Left" Margin="320,174,0,0" VerticalAlignment="Top" Width="32" Click="Add_Sell_Click" BorderBrush="{x:Null}" Height="30" Foreground="{x:Null}">
                 <Button.Background>
                     <ImageBrush ImageSource="Assets/plus.ico"/>
                 </Button.Background>
             </Button>
             <TextBlock HorizontalAlignment="Left" Margin="10,174,0,0" TextWrapping="Wrap" Text="Sell Order:" VerticalAlignment="Top" Height="34" Width="125" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBox x:Name="Sell_Val" HorizontalAlignment="Left" Height="30" Margin="140,174,0,0" TextWrapping="Wrap" Text="0.0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White"/>
-            <TextBlock x:Name="InfoBox_Dash" HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="32" Width="342" TextAlignment="Center" FontSize="18" Foreground="#FFF5702E" />
+            <TextBox x:Name="Sell_Val" HorizontalAlignment="Left" Height="30" Margin="140,174,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="162" FontSize="20" Foreground="#FFF5702E" Background="White" TextAlignment="Right"/>
+            <TextBlock x:Name="InfoBox_Dash" HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="54" Width="342" TextAlignment="Center" FontSize="18" Foreground="#FFF5702E" />
             <TextBlock HorizontalAlignment="Left" Margin="471,45,0,0" TextWrapping="Wrap" Text="Buy Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
-            <TextBlock HorizontalAlignment="Left" Margin="471,209,0,0" TextWrapping="Wrap" Text="Sell Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBlock HorizontalAlignment="Left" Margin="471,217,0,0" TextWrapping="Wrap" Text="Sell Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBlock HorizontalAlignment="Left" Margin="10,239,0,0" TextWrapping="Wrap" Text="Change Offer" VerticalAlignment="Top" Height="34" Width="342" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+            <TextBlock HorizontalAlignment="Left" Margin="28,273,0,0" TextWrapping="Wrap" Text="ID:" VerticalAlignment="Top" Height="34" Width="28" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock HorizontalAlignment="Left" Margin="178,273,0,0" TextWrapping="Wrap" Text="Quantity:" VerticalAlignment="Top" Height="34" Width="84" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock x:Name="idEdited" HorizontalAlignment="Left" Margin="76,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="97" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock x:Name="quantEdited" HorizontalAlignment="Left" Margin="267,273,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="85" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock HorizontalAlignment="Left" Margin="178,312,0,0" TextWrapping="Wrap" Text="Value:" VerticalAlignment="Top" Height="34" Width="84" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock x:Name="valueEdited" HorizontalAlignment="Left" Margin="267,312,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="85" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock HorizontalAlignment="Left" Margin="28,312,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Height="34" Width="72" FontSize="20" Foreground="#D7C09C" />
+            <TextBlock x:Name="statusEdited" HorizontalAlignment="Left" Margin="100,312,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="73" FontSize="20" Foreground="#D7C09C" />
+            <TextBox x:Name="sellValEdited" HorizontalAlignment="Left" Height="30" Margin="28,389,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="145" FontSize="20" Foreground="#FFF5702E" Background="White" TextAlignment="Right"/>
+            <TextBlock HorizontalAlignment="Left" Margin="28,350,0,0" TextWrapping="Wrap" Text="New value:" VerticalAlignment="Top" Height="34" Width="107" FontSize="20" Foreground="#D7C09C" />
+            <Button x:Name="change" Content="Change" HorizontalAlignment="Left" Margin="203,389,0,0" VerticalAlignment="Top" Width="149" Height="28" Click="change_Click"/>
         </Grid>
     </Grid>
 </Window>
