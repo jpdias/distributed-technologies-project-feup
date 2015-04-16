@@ -484,7 +484,8 @@ namespace Common
                         }
                     }
                 }
-
+                /*Notifications*/
+                NotifyClients(Operation.Add);
                 if (saleOrder.Processed)
                 {
                     return "Sale order processed successfully!";
@@ -676,7 +677,8 @@ namespace Common
                                 }
                             }
                         }
-
+                        /*Notifications*/
+                        NotifyClients(Operation.Change);
                         if (saleOrder.Key.Processed)
                         {
                             return "Sale order edited successfully! Sale order processed successfully!";
@@ -877,7 +879,10 @@ namespace Common
                     }
                 }
             }
+
+            /*Notifications*/
             NotifyClients(Operation.Add);
+
             if (buyOrder.Processed)
             {
                 return "Buy order processed successfully!";
@@ -1064,6 +1069,8 @@ namespace Common
                                 }
                             }
                         }
+                        /*Notifications*/
+                        NotifyClients(Operation.Change);
 
                         if (buyOrder.Key.Processed)
                         {

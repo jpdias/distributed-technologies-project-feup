@@ -26,7 +26,8 @@ namespace DESClient
         }
         public void DoAlterations(DES.Operation op)
         {
-            //LoadValues();
+            this.Dispatcher.Invoke((Action)(LoadValues));
+          
         }
 
 
@@ -152,20 +153,50 @@ namespace DESClient
 
         private void Add_Sell_Click(object sender, RoutedEventArgs e)
         {
-            string result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(Sell_Val.Text));
-            InfoBox_Dash.Text = result;
+            double value;
+            string result;
+            if (Double.TryParse(Sell_Val.Text, out value))
+            {
+                result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(value));
+                InfoBox_Dash.Text = result;
+            }
+            else
+            {
+                InfoBox_Dash.Text = "Check your input value.";
+            }
+           
         }
 
         private void Add_Buy_Click(object sender, RoutedEventArgs e)
         {
-            var result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
-            InfoBox_Dash.Text = result;
+            double value;
+            string result;
+            if (Double.TryParse(BuyVal.Text, out value))
+            {
+                result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(value));
+                InfoBox_Dash.Text = result;
+            }
+            else
+            {
+                InfoBox_Dash.Text = "Check your input value.";
+            }
         }
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
-            var result = typeofOp.Text == "Sell" ? App.IDes.EditSaleOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text)) : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
-            InfoBox_Dash.Text = result;
+            double value;
+            string result;
+            if (Double.TryParse(idEdited.Text, out value))
+            {
+                result = typeofOp.Text == "Sell"
+                    ? App.IDes.EditSaleOrder(Convert.ToInt32(value), Convert.ToSingle(valEdited.Text))
+                    : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+                InfoBox_Dash.Text = result;
+            }
+            else
+            {
+                InfoBox_Dash.Text = "Check your input value.";
+            }
         }
 
         private void buy_list_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -196,7 +227,6 @@ namespace DESClient
                 Update.Visibility = Visibility.Visible;
                 //idEdited quantEdited valueEdited statusEdited valEdited
                 DataGrid selected = sender as DataGrid;
-                //idEdited quantEdited valueEdited statusEdited valEdited
                 SaleOrder current = (SaleOrder)selected.CurrentItem;
                 idEdited.Text = current.Id.ToString();
                 quantEdited.Text = current.Quantity.ToString();
