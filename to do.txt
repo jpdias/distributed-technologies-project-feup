@@ -1,2 +1,0 @@
-refresh automático;
-pop up variação preço.

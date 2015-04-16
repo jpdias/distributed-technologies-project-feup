@@ -15,6 +15,8 @@ namespace DESClient
         private string _password;
         private User loggedUser;
 
+        
+
         public MainWindow()
         {
             InitializeComponent();

@@ -6,18 +6,21 @@ using System.Linq;
 using Community.CsharpSqlite.SQLiteClient;
 using System.Timers;
 using System.IO;
+using System.Threading;
 
 namespace Common
 {
     public class DES : MarshalByRefObject, IDES
     {
+        public event AlterDelegate alterEvent; 
+        
         List<User> usersList;
         List<Diginote> diginotesList;
         Dictionary<Diginote, User> market;
         Dictionary<SaleOrder, User> saleOrders;
         Dictionary<BuyOrder, User> buyOrders;
         SqliteConnection m_dbConnection;
-        Timer timer;
+        // Timer timer;
 
         public DES()
         {
@@ -1107,10 +1110,41 @@ namespace Common
 
             return diginotes;
         }
+
+        void NotifyClients(Operation op, Order order)
+        {
+            if (alterEvent != null)
+            {
+                Delegate[] invkList = alterEvent.GetInvocationList();
+
+                foreach (AlterDelegate handler in invkList)
+                {
+                    new Thread(() =>
+                    {
+                        try
+                        {
+                            handler(op, order);
+                            Console.WriteLine("Invoking event handler");
+                        }
+                        catch (Exception)
+                        {
+                            alterEvent -= handler;
+                            Console.WriteLine("Exception: Removed an event handler");
+                        }
+                    }).Start();
+                }
+            }
+        }
     }
+
+    public enum Operation { New, Change };
+
+    public delegate void AlterDelegate(Operation op, Order order);
 
     public interface IDES
     {
+        event AlterDelegate alterEvent;
+        
         string AddUser(string name, string nickname, string password);
         string RemoveUser(string nickname, string password);
         List<User> GetUsersList();
@@ -1126,5 +1160,21 @@ namespace Common
         string AddBuyOrder(ref User user, int quantity);
         string EditBuyOrder(int orderId, float orderValue);
         List<Diginote> GetDiginotes(ref User user);
+    }
+
+    public class AlterEventRepeater : MarshalByRefObject
+    {
+        public event AlterDelegate alterEvent;
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
+        public void Repeater(Operation op, Order order)
+        {
+            if (alterEvent != null)
+                alterEvent(op, order);
+        }
     }
 }
