@@ -14,14 +14,21 @@ namespace DESClient
         private string _username;
         private string _password;
         private User loggedUser;
-
+        static AlterEventRepeater _evRepeater;
         
 
         public MainWindow()
         {
             InitializeComponent();
-            
+            _evRepeater = new AlterEventRepeater();
+            _evRepeater.alterEvent += DoAlterations;
+            App.IDes.alterEvent += _evRepeater.Repeater;
         }
+        public void DoAlterations(DES.Operation op)
+        {
+            //LoadValues();
+        }
+
 
         private void LoadValues()
         {

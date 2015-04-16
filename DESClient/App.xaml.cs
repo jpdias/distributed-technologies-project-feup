@@ -19,23 +19,16 @@ namespace DESClient
     {
 
         public static IDES IDes;
-        static AlterEventRepeater _evRepeater;
+        
 
         private App()
         {
             RemotingConfiguration.Configure("DESClient.exe.config", false);
             IDes = (IDES)RemoteNew.New(typeof(IDES));
-            _evRepeater = new AlterEventRepeater();
-            _evRepeater.alterEvent += DoAlterations;
-            IDes.alterEvent += _evRepeater.Repeater;
-
+            
         }
 
-        public void DoAlterations(DES.Operation op)
-        {
-            Console.WriteLine("hey");
-        }
-
+       
         class RemoteNew
         {
             private static Hashtable _types = null;
