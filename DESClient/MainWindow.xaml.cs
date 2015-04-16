@@ -143,7 +143,8 @@ namespace DESClient
 
         private void Add_Sell_Click(object sender, RoutedEventArgs e)
         {
-           
+            string result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(Sell_Val.Text));
+            InfoBox_Dash.Text = result;
         }
 
         private void Add_Buy_Click(object sender, RoutedEventArgs e)
@@ -154,8 +155,13 @@ namespace DESClient
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
-           string result = App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+            string result;
+            if(typeofOp.Text == "Sell")
+                result = App.IDes.EditSaleOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+           else
+                result = App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
            InfoBox_Dash.Text = result;
+           
            
         }
 
@@ -172,6 +178,7 @@ namespace DESClient
                 valueEdited.Text = current.Value.ToString();
                 statusEdited.Text = current.Processed.ToString();
                 valEdited.Text = current.Value.ToString();
+                typeofOp.Text = "Buy";
             }
             catch (Exception exception)
             {
@@ -193,6 +200,7 @@ namespace DESClient
                 valueEdited.Text = current.Value.ToString();
                 statusEdited.Text = current.Processed.ToString();
                 valEdited.Text = current.Value.ToString();
+                typeofOp.Text = "Sell";
             }
             catch (Exception exception)
             {

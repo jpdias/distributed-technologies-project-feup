@@ -89,7 +89,7 @@
             <TextBlock HorizontalAlignment="Left" Margin="471,45,0,0" TextWrapping="Wrap" Text="Buy Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
             <TextBlock HorizontalAlignment="Left" Margin="471,217,0,0" TextWrapping="Wrap" Text="Sell Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
             <Grid x:Name="Update" Margin="10,239,396,10" Visibility="Hidden">
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Change Offer" VerticalAlignment="Top" Height="34" Width="342" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Change Offer" VerticalAlignment="Top" Height="34" Width="332" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
                 <TextBlock HorizontalAlignment="Left" Margin="18,34,0,0" TextWrapping="Wrap" Text="ID:" VerticalAlignment="Top" Height="34" Width="28" FontSize="20" Foreground="#D7C09C" />
                 <TextBlock HorizontalAlignment="Left" Margin="168,34,0,0" TextWrapping="Wrap" Text="Quantity:" VerticalAlignment="Top" Height="34" Width="84" FontSize="20" Foreground="#D7C09C" />
                 <TextBlock x:Name="idEdited" HorizontalAlignment="Left" Margin="66,34,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="97" FontSize="20" Foreground="#D7C09C" />
@@ -98,9 +98,11 @@
                 <TextBlock x:Name="valueEdited" HorizontalAlignment="Left" Margin="257,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="85" FontSize="20" Foreground="#D7C09C" />
                 <TextBlock HorizontalAlignment="Left" Margin="18,73,0,0" TextWrapping="Wrap" Text="Status:" VerticalAlignment="Top" Height="34" Width="72" FontSize="20" Foreground="#D7C09C" />
                 <TextBlock x:Name="statusEdited" HorizontalAlignment="Left" Margin="90,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="73" FontSize="20" Foreground="#D7C09C" />
-                <TextBox x:Name="valEdited" HorizontalAlignment="Left" Height="30" Margin="18,150,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="145" FontSize="20" Foreground="#FFF5702E" Background="White" TextAlignment="Right"/>
-                <TextBlock HorizontalAlignment="Left" Margin="18,111,0,0" TextWrapping="Wrap" Text="New value:" VerticalAlignment="Top" Height="34" Width="107" FontSize="20" Foreground="#D7C09C" />
-                <Button x:Name="change" Content="Change" HorizontalAlignment="Left" Margin="193,150,0,0" VerticalAlignment="Top" Width="149" Height="28" Click="change_Click" BorderBrush="{x:Null}" Background="#FFF5702E" Foreground="White"/>
+                <TextBox x:Name="valEdited" HorizontalAlignment="Left" Height="30" Margin="139,148,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" Width="97" FontSize="20" Foreground="#FFF5702E" Background="White" TextAlignment="Right"/>
+                <TextBlock HorizontalAlignment="Left" Margin="18,146,0,0" TextWrapping="Wrap" Text="New value:" VerticalAlignment="Top" Height="34" Width="107" FontSize="20" Foreground="#D7C09C" />
+                <Button x:Name="change" Content="Change" HorizontalAlignment="Left" Margin="241,150,0,0" VerticalAlignment="Top" Width="101" Height="28" Click="change_Click" BorderBrush="{x:Null}" Background="#FFF5702E" Foreground="White"/>
+                <TextBlock HorizontalAlignment="Left" Margin="18,107,0,0" TextWrapping="Wrap" Text="Type:" VerticalAlignment="Top" Height="34" Width="107" FontSize="20" Foreground="#D7C09C" />
+                <TextBlock x:Name="typeofOp" HorizontalAlignment="Left" Margin="168,107,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="34" Width="164" FontSize="20" Foreground="#D7C09C" />
             </Grid>
         </Grid>
     </Grid>
