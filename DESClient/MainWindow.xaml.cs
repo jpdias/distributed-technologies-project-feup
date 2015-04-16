@@ -26,10 +26,21 @@ namespace DESClient
         }
         public void DoAlterations(DES.Operation op)
         {
-            this.Dispatcher.Invoke((Action)(LoadValues));
-          
+            if(op == DES.Operation.Change || op == DES.Operation.Add)
+                this.Dispatcher.Invoke((Action)(LoadValues));
+            else if(op == DES.Operation.StartSuspension)
+            {
+                alertChange(true);
+            }
+            else if (op == DES.Operation.EndSuspension)
+            {
+                alertChange(false);
+            }
+            else
+            {
+                return;
+            }
         }
-
 
         private void LoadValues()
         {
@@ -239,6 +250,24 @@ namespace DESClient
             {
                 Console.WriteLine(exception);
             }
+        }
+
+        private void deleteOrder_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void alertChange(bool status)
+        {
+            string alert;
+            if (status)
+                alert = "Market Quote changed. You have 1 minute to change your orders.";
+            else
+            {
+                alert = "Market Quote changed. Timeout.";
+            }
+            MessageBoxResult result = MessageBox.Show(alert, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+
         }
 
     }

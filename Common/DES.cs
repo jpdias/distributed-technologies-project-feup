@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Community.CsharpSqlite.SQLiteClient;
 using System.Timers;
 using System.IO;
 using System.Threading;
+using Timer = System.Timers.Timer;
 
 namespace Common
 {
@@ -21,11 +20,16 @@ namespace Common
         Dictionary<BuyOrder, User> buyOrders;
         SqliteConnection m_dbConnection;
         // Timer timer;
+        private int _interval = 60000;
+        private Timer _timer;
 
-        public enum Operation { Add, Change };
+        public enum Operation { Add, Change, StartSuspension, EndSuspension};
 
         public DES()
         {
+            _timer = new Timer(_interval);
+            _timer.Elapsed += timer_Tick;
+
             m_dbConnection = new SqliteConnection("Data Source=db/db.sqlite;Version=3;");
             m_dbConnection.Open();
 
@@ -44,7 +48,15 @@ namespace Common
             market = GetMarketFromDb();
             market = GetMarket();
         }
-        
+
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            NotifyClients(Operation.EndSuspension);
+            _timer.Stop();
+            _timer = new Timer(_interval);
+        }
+
         public override object InitializeLifetimeService()
         {
             return null;
