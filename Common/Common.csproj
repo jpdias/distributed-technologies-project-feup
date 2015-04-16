@@ -98,7 +98,7 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="db\db.sqlite">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
   </ItemGroup>

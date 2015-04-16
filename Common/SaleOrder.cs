@@ -16,5 +16,13 @@ namespace Common
             this.Quantity = quantity;
             this.Value = value;
         }
+
+        public SaleOrder(int id, int quantity, float value, bool processed)
+        {
+            this.Id = id;
+            this.Quantity = quantity;
+            this.Value = value;
+            this.Processed = processed;
+        }
     }
 }

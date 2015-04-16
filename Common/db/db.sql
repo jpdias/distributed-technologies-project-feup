@@ -20,3 +20,19 @@ CREATE TABLE MarketLog(
    time TEXT,
    description TEXT
 );
+
+CREATE TABLE SaleOrders(
+   id INTEGER PRIMARY KEY,
+   quantity INTEGER,
+   value REAL,
+   processed BOOLEAN,
+   userId INTEGER
+);
+
+CREATE TABLE BuyOrders(
+   id INTEGER PRIMARY KEY,
+   quantity INTEGER,
+   value REAL,
+   processed BOOLEAN,
+   userId INTEGER
+);

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Community.CsharpSqlite.SQLiteClient;
-using System.Timers;
 using System.IO;
 using System.Threading;
 using Timer = System.Timers.Timer;
@@ -19,9 +19,9 @@ namespace Common
         Dictionary<SaleOrder, User> saleOrders;
         Dictionary<BuyOrder, User> buyOrders;
         SqliteConnection m_dbConnection;
-        // Timer timer;
-        private int _interval = 60000;
+        
         private Timer _timer;
+        private int _interval = 8000;
 
         public enum Operation { Add, Change, StartSuspension, EndSuspension};
 
@@ -46,15 +46,16 @@ namespace Common
             usersList = GetUsersListFromDb();
             diginotesList = GetDiginotesListFromDb();
             market = GetMarketFromDb();
-            market = GetMarket();
+            saleOrders = GetSaleOrdersFromDb();
+            buyOrders = GetBuyOrdersFromDb();
         }
 
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            NotifyClients(Operation.EndSuspension);
             _timer.Stop();
             _timer = new Timer(_interval);
+            NotifyClients(Operation.EndSuspension);
         }
 
         public override object InitializeLifetimeService()
@@ -127,7 +128,57 @@ namespace Common
             return result;
         }
 
+        public Dictionary<SaleOrder, User> GetSaleOrdersFromDb()
+        {
+            Dictionary<SaleOrder, User> result = new Dictionary<SaleOrder, User>();
+            string sql = "SELECT * FROM SaleOrders";
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                SqliteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(1);
+                    int quantity = reader.GetInt32(2);
+                    float value = reader.GetFloat(3);
+                    bool processed = reader.GetBoolean(4);
+                    int userId = reader.GetInt32(5);
+                    result.Add(new SaleOrder(id, quantity, value, processed), usersList[userId - 1]);
+                }
+            }
+            catch (Exception e)
+            {
 
+            }
+
+            return result;
+        }
+
+        public Dictionary<BuyOrder, User> GetBuyOrdersFromDb()
+        {
+            Dictionary<BuyOrder, User> result = new Dictionary<BuyOrder, User>();
+            string sql = "SELECT * FROM BuyOrders";
+            try
+            {
+                SqliteCommand command = new SqliteCommand(sql, m_dbConnection);
+                SqliteDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    int quantity = reader.GetInt32(1);
+                    double value = double.Parse(reader.GetString(2), CultureInfo.InvariantCulture);
+                    bool processed = reader.GetBoolean(3);
+                    int userId = reader.GetInt32(4);
+                    result.Add(new BuyOrder(id, quantity, (float) value, processed), usersList[userId - 1]);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            return result;
+        }
 
         public string AddUser(string name, string nickname, string password)
         {
@@ -334,6 +385,20 @@ namespace Common
             {
                 SaleOrder saleOrder = new SaleOrder(quantity, GetQuote());
 
+
+                string _sql = String.Format("INSERT INTO SaleOrders ('id', 'quantity', 'value', 'processed', 'userId') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", saleOrder.Id, saleOrder.Quantity, saleOrder.Value, saleOrder.Processed, user.Id);
+                try
+                {
+                    SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return "Error adding saleorder to db!";
+                }
+
+
                 saleOrders.Add(saleOrder, user);
 
                 User seller;
@@ -527,6 +592,9 @@ namespace Common
                         {
                             diginote.Key.Quote = orderValue;
                         }
+
+                        _timer.Start();
+                        NotifyClients(Operation.StartSuspension);
 
 
                         User seller;
@@ -729,6 +797,20 @@ namespace Common
         {
             BuyOrder buyOrder = new BuyOrder(quantity, GetQuote());
 
+
+            string _sql = String.Format("INSERT INTO BuyOrders ('id', 'quantity', 'value', 'processed', 'userId') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", buyOrder.Id, buyOrder.Quantity, buyOrder.Value, buyOrder.Processed, user.Id);
+            try
+            {
+                SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "Error adding buyorder to db!";
+            }
+
+
             buyOrders.Add(buyOrder, user);
 
             User seller;
@@ -919,6 +1001,9 @@ namespace Common
                         {
                             diginote.Key.Quote = orderValue;
                         }
+
+                        _timer.Start();
+                        NotifyClients(Operation.StartSuspension);
 
 
                         User seller;
@@ -1132,20 +1217,39 @@ namespace Common
                         try
                         {
                             handler(op);
-                            Console.WriteLine("Invoking event handler");
                         }
                         catch (Exception)
                         {
                             alterEvent -= handler;
-                            Console.WriteLine("Exception: Removed an event handler");
                         }
                     }).Start();
                 }
             }
         }
-    }
 
-   
+
+        public User GetUserFromOrder(Order order)
+        {
+            foreach (var saleOrder in saleOrders)
+            {
+                if (saleOrder.Key.Id == order.Id)
+                {
+                    return saleOrder.Value;
+                }
+            }
+
+            foreach (var buyOrder in buyOrders)
+            {
+                if (buyOrder.Key.Id == order.Id)
+                {
+                    Console.WriteLine(buyOrder.Value);
+                    return buyOrder.Value;
+                }
+            }
+
+            return usersList[0];
+        }
+    }
 
     public delegate void AlterDelegate(DES.Operation op);
 
@@ -1168,6 +1272,7 @@ namespace Common
         string AddBuyOrder(ref User user, int quantity);
         string EditBuyOrder(int orderId, float orderValue);
         List<Diginote> GetDiginotes(ref User user);
+        User GetUserFromOrder(Order order);
     }
 
     public class AlterEventRepeater : MarshalByRefObject

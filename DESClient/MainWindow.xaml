@@ -8,7 +8,7 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="Title" Margin="0,24,0,409" TextWrapping="Wrap" Text="Diginote Exchange System" FontSize="24" TextAlignment="Center" Foreground="#D7C09C" Grid.Column="1"/>
-        <Grid x:Name="login" Grid.ColumnSpan="2" Grid.Column="0" Margin="164,73,164,30" Visibility="Hidden">
+        <Grid x:Name="login" Grid.ColumnSpan="2" Grid.Column="0" Margin="164,73,164,30" Visibility="Visible">
             <TextBox x:Name="Username" HorizontalAlignment="Right" Height="38" TextWrapping="Wrap"  VerticalAlignment="Top" Width="290" FontSize="22" Margin="0,82,0,0"/>
             <PasswordBox x:Name="Password" HorizontalAlignment="Right" Height="38" Margin="0,150,0,0" VerticalAlignment="Top" Width="290" FontSize="22"/>
             <TextBlock HorizontalAlignment="Right" Margin="0,82,328,0" TextWrapping="Wrap" Text="Username:" VerticalAlignment="Top" Height="38" Width="112" TextAlignment="Right" FontSize="22" Foreground="#D7C09C"/>
@@ -30,7 +30,7 @@
             <Button x:Name="LoginBack" Content="Login" Margin="59,346,-1,0" VerticalAlignment="Top" Height="46" FontSize="22" Background="#F5702E" Foreground="#FFECF0F1" Click="LoginBack_Click" />
             <Button x:Name="Register" Content="Register" Margin="59,288,0,0" VerticalAlignment="Top" Height="46" IsDefault="True" FontSize="22" Background="#F5702E" Foreground="#FFECF0F1" Click="Register_Click"/>
         </Grid>
-        <Grid x:Name="main" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="429" Margin="10,68,0,0" VerticalAlignment="Top" Width="748" Visibility="Visible" >
+        <Grid x:Name="main" Grid.ColumnSpan="2" HorizontalAlignment="Left" Height="429" Margin="10,68,0,0" VerticalAlignment="Top" Width="748" Visibility="Hidden" >
             <Menu Margin="598,10,10,392" FontSize="14" Background="#F5702E" >
                 <MenuItem x:Name="menu" Header="User" Height="30" Width="140" Foreground="#FFECF0F1">
                     <MenuItem Header="Logout" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0" Click="logout_click" Background="#F5702E" Foreground="#FFECF0F1"/>
@@ -88,7 +88,7 @@
             <TextBlock x:Name="InfoBox_Dash" HorizontalAlignment="Left" Margin="10,72,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="60" Width="342" TextAlignment="Center" Foreground="#FFF5702E" />
             <TextBlock HorizontalAlignment="Left" Margin="471,45,0,0" TextWrapping="Wrap" Text="Buy Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
             <TextBlock HorizontalAlignment="Left" Margin="471,217,0,0" TextWrapping="Wrap" Text="Sell Orders" VerticalAlignment="Top" Height="34" Width="146" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
-            <Grid x:Name="Update" Margin="10,239,396,10" Visibility="Visible">
+            <Grid x:Name="Update" Margin="10,239,396,10" Visibility="Hidden">
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Change Offer" VerticalAlignment="Top" Height="34" Width="236" FontSize="20" Foreground="#D7C09C" TextAlignment="Center" />
                 <TextBlock HorizontalAlignment="Left" Margin="18,34,0,0" TextWrapping="Wrap" Text="ID:" VerticalAlignment="Top" Height="34" Width="28" FontSize="20" Foreground="#D7C09C" />
                 <TextBlock HorizontalAlignment="Left" Margin="168,34,0,0" TextWrapping="Wrap" Text="Quantity:" VerticalAlignment="Top" Height="34" Width="84" FontSize="20" Foreground="#D7C09C" />

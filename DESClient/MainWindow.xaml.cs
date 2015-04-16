@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Common;
@@ -15,7 +16,7 @@ namespace DESClient
         private string _password;
         private User loggedUser;
         static AlterEventRepeater _evRepeater;
-        
+        private bool status;
 
         public MainWindow()
         {
@@ -24,17 +25,28 @@ namespace DESClient
             _evRepeater.alterEvent += DoAlterations;
             App.IDes.alterEvent += _evRepeater.Repeater;
         }
+
         public void DoAlterations(DES.Operation op)
         {
             if(op == DES.Operation.Change || op == DES.Operation.Add)
                 this.Dispatcher.Invoke((Action)(LoadValues));
             else if(op == DES.Operation.StartSuspension)
             {
-                alertChange(true);
+                if (App.IDes.GetSaleOrders(ref loggedUser).Any(order => !order.Processed))
+                {
+                    alertChange(true);
+                    status = true;
+                }
+                else if (App.IDes.GetBuyOrders(ref loggedUser).Any(order => !order.Processed))
+                {
+                    alertChange(true);
+                    status = true;
+                }
             }
-            else if (op == DES.Operation.EndSuspension)
+            else if (op == DES.Operation.EndSuspension && status)
             {
                 alertChange(false);
+                status = false;
             }
             else
             {
