@@ -15,10 +15,11 @@ namespace Common
 
         public BuyOrder(int id, int quantity, float value, bool processed)
         {
-            Id = id;
-            Quantity = quantity;
-            Value = value;
-            Processed = processed;
+            Serial += 1; 
+            this.Id = id;
+            this.Quantity = quantity;
+            this.Value = value;
+            this.Processed = processed;
         }
     }
 }

@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Common
 {
@@ -8,17 +12,18 @@ namespace Common
         public SaleOrder(int quantity, float value)
         {
             Serial += 1;
-            Id = Serial;
-            Quantity = quantity;
-            Value = value;
+            this.Id = Serial;
+            this.Quantity = quantity;
+            this.Value = value;
         }
 
         public SaleOrder(int id, int quantity, float value, bool processed)
         {
-            Id = id;
-            Quantity = quantity;
-            Value = value;
-            Processed = processed;
+            Serial += 1; 
+            this.Id = id;
+            this.Quantity = quantity;
+            this.Value = value;
+            this.Processed = processed;
         }
     }
 }

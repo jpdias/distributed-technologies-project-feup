@@ -32,7 +32,7 @@ CREATE TABLE SaleOrders(
 CREATE TABLE BuyOrders(
    id INTEGER PRIMARY KEY,
    quantity INTEGER,
-   value REAL,
+   value FLOAT,
    processed BOOLEAN,
    userId INTEGER
 );
