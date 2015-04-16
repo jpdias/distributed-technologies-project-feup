@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using Common;
 
 namespace DESClient
@@ -135,20 +136,6 @@ namespace DESClient
             throw new NotImplementedException();
         }
 
-        private void Buy_OnClick(object sender, RoutedEventArgs e)
-        {
-            //idEdited quantEdited valueEdited statusEdited sellValEdited
-            BuyOrder current = (BuyOrder) e.Source;
-            idEdited.Text = current.Id.ToString();
-        }
-
-        private void Sell_OnClick(object sender, RoutedEventArgs e)
-        {
-            //idEdited quantEdited valueEdited statusEdited sellValEdited
-            SaleOrder current = (SaleOrder)e.Source;
-            idEdited.Text = current.Id.ToString();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadValues();
@@ -156,8 +143,7 @@ namespace DESClient
 
         private void Add_Sell_Click(object sender, RoutedEventArgs e)
         {
-            string result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(Sell_Val.Text));
-            InfoBox_Dash.Text = result;
+           
         }
 
         private void Add_Buy_Click(object sender, RoutedEventArgs e)
@@ -168,7 +154,50 @@ namespace DESClient
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
+           string result = App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+           InfoBox_Dash.Text = result;
+           
+        }
 
+        private void buy_list_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                Update.Visibility = Visibility.Visible;
+                DataGrid selected = sender as DataGrid;
+                //idEdited quantEdited valueEdited statusEdited valEdited
+                BuyOrder current = (BuyOrder) selected.CurrentItem;
+                idEdited.Text = current.Id.ToString();
+                quantEdited.Text = current.Quantity.ToString();
+                valueEdited.Text = current.Value.ToString();
+                statusEdited.Text = current.Processed.ToString();
+                valEdited.Text = current.Value.ToString();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
+        }
+
+        private void sell_list_click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                Update.Visibility = Visibility.Visible;
+                //idEdited quantEdited valueEdited statusEdited valEdited
+                DataGrid selected = sender as DataGrid;
+                //idEdited quantEdited valueEdited statusEdited valEdited
+                SaleOrder current = (SaleOrder)selected.CurrentItem;
+                idEdited.Text = current.Id.ToString();
+                quantEdited.Text = current.Quantity.ToString();
+                valueEdited.Text = current.Value.ToString();
+                statusEdited.Text = current.Processed.ToString();
+                valEdited.Text = current.Value.ToString();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+            }
         }
 
     }
