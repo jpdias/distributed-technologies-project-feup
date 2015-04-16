@@ -8,9 +8,9 @@ namespace Common
         public BuyOrder(int quantity, float value)
         {
             Serial += 1;
-            Id = Serial;
-            Quantity = quantity;
-            Value = value;
+            this.Id = Serial;
+            this.Quantity = quantity;
+            this.Value = value;
         }
 
         public BuyOrder(int id, int quantity, float value, bool processed)

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Community.CsharpSqlite.SQLiteClient;
 using System.IO;
+using System.Security.Claims;
 using System.Threading;
 using Timer = System.Timers.Timer;
 
@@ -817,6 +818,7 @@ namespace Common
                     {
                         SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
                         command.ExecuteNonQuery();
+                        NotifyClients(Operation.Change);
                     }
                     catch (Exception e)
                     {
@@ -1271,6 +1273,7 @@ namespace Common
                     {
                         SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
                         command.ExecuteNonQuery();
+                        NotifyClients(Operation.Change);
                     }
                     catch (Exception e)
                     {

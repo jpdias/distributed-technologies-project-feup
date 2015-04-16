@@ -264,6 +264,12 @@ namespace DESClient
 
         private void deleteOrder_Click(object sender, RoutedEventArgs e)
         {
+            if(typeofOp.Text == "Sell")
+                App.IDes.RemoveSaleOrder(Convert.ToInt32(idEdited.Text));
+            else
+                App.IDes.RemoveBuyOrder(Convert.ToInt32(idEdited.Text));
+
+            Update.Visibility = Visibility.Hidden;
         }
 
         private void alertChange(bool status)
