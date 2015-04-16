@@ -22,7 +22,7 @@ namespace Common
         SqliteConnection m_dbConnection;
         
         private Timer _timer;
-        private int _interval = 8000;
+        private int _interval = 60000;
 
         public enum Operation { Add, Change, StartSuspension, EndSuspension};
 
