@@ -49,8 +49,6 @@ namespace Common
             market = GetMarketFromDb();
             saleOrders = GetSaleOrdersFromDb();
             buyOrders = GetBuyOrdersFromDb();
-
-            RemoveBuyOrder(1);
         }
 
 
@@ -599,9 +597,21 @@ namespace Common
                     {
                         saleOrder.Key.Value = orderValue;
 
+                        // Update diginotes value
                         foreach (var diginote in market)
                         {
                             diginote.Key.Quote = orderValue;
+                        }
+
+                        // Update sale orders value
+                        foreach (var innerSaleOrder in saleOrders)
+                        {
+                            innerSaleOrder.Key.Value = orderValue;
+                        }
+                        // Update buy orders value
+                        foreach (var innerBuyOrder in buyOrders)
+                        {
+                            innerBuyOrder.Key.Value = orderValue;
                         }
 
                         _timer.Start();
@@ -1053,9 +1063,21 @@ namespace Common
                     {
                         buyOrder.Key.Value = orderValue;
 
+                        // Update diginotes value
                         foreach (var diginote in market)
                         {
                             diginote.Key.Quote = orderValue;
+                        }
+
+                        // Update sale orders value
+                        foreach (var innerSaleOrder in saleOrders)
+                        {
+                            innerSaleOrder.Key.Value = orderValue;
+                        }
+                        // Update buy orders value
+                        foreach (var innerBuyOrder in buyOrders)
+                        {
+                            innerBuyOrder.Key.Value = orderValue;
                         }
 
                         _timer.Start();
