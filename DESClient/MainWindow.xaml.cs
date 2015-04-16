@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -212,8 +213,10 @@ namespace DESClient
             if (Double.TryParse(idEdited.Text, out value))
             {
                 result = typeofOp.Text == "Sell"
-                    ? App.IDes.EditSaleOrder(Convert.ToInt32(value), Convert.ToSingle(valEdited.Text))
-                    : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+                    ? App.IDes.EditSaleOrder(Convert.ToInt32(value),
+                        float.Parse(valEdited.Text, CultureInfo.InvariantCulture.NumberFormat))
+                    : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text),
+                        float.Parse(valEdited.Text, CultureInfo.InvariantCulture.NumberFormat));
                 InfoBox_Dash.Text = result;
             }
             else

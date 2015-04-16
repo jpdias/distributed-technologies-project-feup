@@ -138,11 +138,14 @@ namespace Common
                 SqliteDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-                    int id = reader.GetInt32(1);
-                    int quantity = reader.GetInt32(2);
-                    float value = reader.GetFloat(3);
-                    bool processed = reader.GetBoolean(4);
-                    int userId = reader.GetInt32(5);
+                    int id = reader.GetInt32(0);
+                    int quantity = reader.GetInt32(1);
+                    string valueString = reader.GetString(2);
+                    if (valueString.Contains(","))
+                        valueString = valueString.Replace(",", ".");
+                    float value = float.Parse(valueString, CultureInfo.InvariantCulture.NumberFormat);
+                    bool processed = reader.GetBoolean(3);
+                    int userId = reader.GetInt32(4);
                     result.Add(new SaleOrder(id, quantity, value, processed), usersList[userId - 1]);
                 }
             }
@@ -166,10 +169,13 @@ namespace Common
                 {
                     int id = reader.GetInt32(0);
                     int quantity = reader.GetInt32(1);
-                    double value = double.Parse(reader.GetString(2), CultureInfo.InvariantCulture);
+                    string valueString = reader.GetString(2);
+                    if (valueString.Contains(","))
+                        valueString = valueString.Replace(",", ".");
+                    float value = float.Parse(valueString, CultureInfo.InvariantCulture.NumberFormat);
                     bool processed = reader.GetBoolean(3);
                     int userId = reader.GetInt32(4);
-                    result.Add(new BuyOrder(id, quantity, (float) value, processed), usersList[userId - 1]);
+                    result.Add(new BuyOrder(id, quantity, value, processed), usersList[userId - 1]);
                 }
             }
             catch (Exception e)
@@ -385,20 +391,6 @@ namespace Common
             {
                 SaleOrder saleOrder = new SaleOrder(quantity, GetQuote());
 
-
-                string _sql = String.Format("INSERT INTO SaleOrders ('id', 'quantity', 'value', 'processed', 'userId') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", saleOrder.Id, saleOrder.Quantity, saleOrder.Value, saleOrder.Processed, user.Id);
-                try
-                {
-                    SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
-                    command.ExecuteNonQuery();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                    return "Error adding saleorder to db!";
-                }
-
-
                 saleOrders.Add(saleOrder, user);
 
                 User seller;
@@ -561,8 +553,24 @@ namespace Common
                         }
                     }
                 }
+
+
+                string _sql = String.Format("INSERT INTO SaleOrders ('id', 'quantity', 'value', 'processed', 'userId') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", saleOrder.Id, saleOrder.Quantity, saleOrder.Value, saleOrder.Processed, user.Id);
+                try
+                {
+                    SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    return "Error adding sale order to db!";
+                }
+
+
                 /*Notifications*/
                 NotifyClients(Operation.Add);
+               
                 if (saleOrder.Processed)
                 {
                     return "Sale order processed successfully!";
@@ -595,7 +603,6 @@ namespace Common
 
                         _timer.Start();
                         NotifyClients(Operation.StartSuspension);
-
 
                         User seller;
                         User buyer;
@@ -757,8 +764,24 @@ namespace Common
                                 }
                             }
                         }
+
+
+                        string _sql = String.Format("UPDATE SaleOrders SET value = '{0}' WHERE id = '{1}'", saleOrder.Key.Value, saleOrder.Key.Id);
+                        try
+                        {
+                            SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                            command.ExecuteNonQuery();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            return "Error editing sale order to db!";
+                        }
+
+                        
                         /*Notifications*/
                         NotifyClients(Operation.Change);
+                        
                         if (saleOrder.Key.Processed)
                         {
                             return "Sale order edited successfully! Sale order processed successfully!";
@@ -772,6 +795,35 @@ namespace Common
                     {
                         return "Error: Sale order already processed!";
                     }
+                }
+            }
+
+            return "Error: Sale order not found!";
+        }
+
+        public string RemoveSaleOrder(int orderId)
+        {
+            foreach (var saleOrder in saleOrders)
+            {
+                if (saleOrder.Key.Id == orderId)
+                {
+                    saleOrders.Remove(saleOrder.Key);
+
+
+                    string _sql = String.Format("DELETE FROM SaleOrders WHERE id = '{1}'", saleOrder.Key.Id);
+                    try
+                    {
+                        SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        return "Error removing sale order to db!";
+                    }
+
+
+                    return "Sale order removed successfully!";
                 }
             }
 
@@ -796,20 +848,6 @@ namespace Common
         public string AddBuyOrder(ref User user, int quantity)
         {
             BuyOrder buyOrder = new BuyOrder(quantity, GetQuote());
-
-
-            string _sql = String.Format("INSERT INTO BuyOrders ('id', 'quantity', 'value', 'processed', 'userId') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", buyOrder.Id, buyOrder.Quantity, buyOrder.Value, buyOrder.Processed, user.Id);
-            try
-            {
-                SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
-                command.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return "Error adding buyorder to db!";
-            }
-
 
             buyOrders.Add(buyOrder, user);
 
@@ -973,6 +1011,20 @@ namespace Common
                     }
                 }
             }
+
+
+            string _sql = String.Format("INSERT INTO BuyOrders ('id', 'quantity', 'value', 'processed', 'userId') VALUES ('{0}', '{1}', '{2}', '{3}', '{4}')", buyOrder.Id, buyOrder.Quantity, buyOrder.Value, buyOrder.Processed, user.Id);
+            try
+            {
+                SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return "Error editing buy order to db!";
+            }
+
 
             /*Notifications*/
             NotifyClients(Operation.Add);
@@ -1166,6 +1218,21 @@ namespace Common
                                 }
                             }
                         }
+
+
+                        string _sql = String.Format("UPDATE BuyOrders SET value = '{0}' WHERE id = '{1}'", buyOrder.Key.Value, buyOrder.Key.Id);
+                        try
+                        {
+                            SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                            command.ExecuteNonQuery();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                            return "Error adding buy order to db!";
+                        }
+
+
                         /*Notifications*/
                         NotifyClients(Operation.Change);
 
@@ -1186,6 +1253,35 @@ namespace Common
             }
 
             return "Error: Buy order not found!";
+        }
+
+        public string RemoveBuyOrder(int orderId)
+        {
+            foreach (var buyOrder in buyOrders)
+            {
+                if (buyOrder.Key.Id == orderId)
+                {
+                    buyOrders.Remove(buyOrder.Key);
+
+
+                    string _sql = String.Format("DELETE FROM SaleOrders WHERE id = '{1}'", buyOrder.Key.Id);
+                    try
+                    {
+                        SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
+                        command.ExecuteNonQuery();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        return "Error removing buy order to db!";
+                    }
+
+
+                    return "Buy order removed successfully!";
+                }
+            }
+
+            return "Error: Sale order not found!";
         }
 
         public List<Diginote> GetDiginotes(ref User user)
@@ -1268,9 +1364,11 @@ namespace Common
         string AddSaleOrder(ref User user, int quantity);
         List<SaleOrder> GetSaleOrders(ref User user);
         string EditSaleOrder(int orderId, float orderValue);
+        string RemoveSaleOrder(int orderId);
         List<BuyOrder> GetBuyOrders(ref User user);
         string AddBuyOrder(ref User user, int quantity);
         string EditBuyOrder(int orderId, float orderValue);
+        string RemoveBuyOrder(int orderId);
         List<Diginote> GetDiginotes(ref User user);
         User GetUserFromOrder(Order order);
     }
