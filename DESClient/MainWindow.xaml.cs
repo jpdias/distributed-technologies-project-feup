@@ -163,11 +163,6 @@ namespace DESClient
             //offers;
         }
 
-        private void Changepw_click(object sender, RoutedEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             LoadValues();

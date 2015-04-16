@@ -66,8 +66,6 @@
                 <MenuItem x:Name="menu" Header="User" Height="30" Width="140" Foreground="#FFECF0F1">
                     <MenuItem Header="Logout" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0"
                               Click="logout_click" Background="#F5702E" Foreground="#FFECF0F1" />
-                    <MenuItem Header="Change PW" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0"
-                              Click="Changepw_click" Background="#F5702E" Foreground="#FFECF0F1" />
                 </MenuItem>
             </Menu>
             <DataGrid x:Name="buy_list" CanUserReorderColumns="False" CanUserResizeRows="False"
