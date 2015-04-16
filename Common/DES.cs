@@ -48,6 +48,8 @@ namespace Common
             market = GetMarketFromDb();
             saleOrders = GetSaleOrdersFromDb();
             buyOrders = GetBuyOrdersFromDb();
+
+            RemoveBuyOrder(1);
         }
 
 
@@ -810,7 +812,7 @@ namespace Common
                     saleOrders.Remove(saleOrder.Key);
 
 
-                    string _sql = String.Format("DELETE FROM SaleOrders WHERE id = '{1}'", saleOrder.Key.Id);
+                    string _sql = String.Format("DELETE FROM SaleOrders WHERE id = '{0}'", saleOrder.Key.Id);
                     try
                     {
                         SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
@@ -1264,7 +1266,7 @@ namespace Common
                     buyOrders.Remove(buyOrder.Key);
 
 
-                    string _sql = String.Format("DELETE FROM SaleOrders WHERE id = '{1}'", buyOrder.Key.Id);
+                    string _sql = String.Format("DELETE FROM SaleOrders WHERE id = '{0}'", buyOrder.Key.Id);
                     try
                     {
                         SqliteCommand command = new SqliteCommand(_sql, m_dbConnection);
