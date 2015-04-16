@@ -151,20 +151,14 @@ namespace DESClient
 
         private void Add_Buy_Click(object sender, RoutedEventArgs e)
         {
-            string result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
+            var result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(BuyVal.Text));
             InfoBox_Dash.Text = result;
         }
 
         private void change_Click(object sender, RoutedEventArgs e)
         {
-            string result;
-            if(typeofOp.Text == "Sell")
-                result = App.IDes.EditSaleOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
-           else
-                result = App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
-           InfoBox_Dash.Text = result;
-           
-           
+            var result = typeofOp.Text == "Sell" ? App.IDes.EditSaleOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text)) : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+            InfoBox_Dash.Text = result;
         }
 
         private void buy_list_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)

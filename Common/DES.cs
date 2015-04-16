@@ -12,7 +12,7 @@ namespace Common
 {
     public class DES : MarshalByRefObject, IDES
     {
-        public event AlterDelegate alterEvent; 
+        public event AlterDelegate alterEvent;
         
         List<User> usersList;
         List<Diginote> diginotesList;
@@ -21,6 +21,8 @@ namespace Common
         Dictionary<BuyOrder, User> buyOrders;
         SqliteConnection m_dbConnection;
         // Timer timer;
+
+        public enum Operation { Add, Change };
 
         public DES()
         {
@@ -41,22 +43,7 @@ namespace Common
             diginotesList = GetDiginotesListFromDb();
             market = GetMarketFromDb();
             market = GetMarket();
-
-            /*
-            timer = new Timer();
-            timer.Elapsed += new ElapsedEventHandler(updateEvent);
-            timer.Interval = 1000; // in miliseconds
-            timer.Enabled = true;
-            timer.Start();
-            */
         }
-
-        /*
-        private void updateEvent(object sender, ElapsedEventArgs e)
-        {
-            
-        }
-        */
         
         public override object InitializeLifetimeService()
         {
@@ -75,7 +62,6 @@ namespace Common
                 {
                     result.Add(new User(reader.GetInt32(0), reader["username"].ToString(), reader["nickname"].ToString(), reader["password"].ToString()));
                 }
-
             }
             catch (Exception e)
             {
@@ -128,6 +114,8 @@ namespace Common
 
             return result;
         }
+
+
 
         public string AddUser(string name, string nickname, string password)
         {
@@ -889,7 +877,7 @@ namespace Common
                     }
                 }
             }
-
+            NotifyClients(Operation.Add);
             if (buyOrder.Processed)
             {
                 return "Buy order processed successfully!";
@@ -1111,7 +1099,8 @@ namespace Common
             return diginotes;
         }
 
-        void NotifyClients(Operation op, Order order)
+
+        void NotifyClients(Operation op)
         {
             if (alterEvent != null)
             {
@@ -1123,7 +1112,7 @@ namespace Common
                     {
                         try
                         {
-                            handler(op, order);
+                            handler(op);
                             Console.WriteLine("Invoking event handler");
                         }
                         catch (Exception)
@@ -1137,9 +1126,9 @@ namespace Common
         }
     }
 
-    public enum Operation { New, Change };
+   
 
-    public delegate void AlterDelegate(Operation op, Order order);
+    public delegate void AlterDelegate(DES.Operation op);
 
     public interface IDES
     {
@@ -1171,10 +1160,10 @@ namespace Common
             return null;
         }
 
-        public void Repeater(Operation op, Order order)
+        public void Repeater(DES.Operation op)
         {
             if (alterEvent != null)
-                alterEvent(op, order);
+                alterEvent(op);
         }
     }
 }

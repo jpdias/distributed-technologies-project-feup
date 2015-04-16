@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.Remoting;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms.VisualStyles;
 using Common;
 
 namespace DESClient
@@ -18,14 +19,23 @@ namespace DESClient
     {
 
         public static IDES IDes;
+        static AlterEventRepeater _evRepeater;
 
         private App()
         {
             RemotingConfiguration.Configure("DESClient.exe.config", false);
             IDes = (IDES)RemoteNew.New(typeof(IDES));
-            Console.WriteLine("Diginote Exchange System v0.1");
-            Console.WriteLine("Welcome!");
+            _evRepeater = new AlterEventRepeater();
+            _evRepeater.alterEvent += DoAlterations;
+            IDes.alterEvent += _evRepeater.Repeater;
+
         }
+
+        public void DoAlterations(DES.Operation op)
+        {
+            Console.WriteLine("hey");
+        }
+
         class RemoteNew
         {
             private static Hashtable _types = null;
