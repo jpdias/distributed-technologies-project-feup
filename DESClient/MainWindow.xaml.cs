@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using Common;
 
 namespace DESClient
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    ///     Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
-        private string _username;
+        private static AlterEventRepeater _evRepeater;
         private string _password;
+        private string _username;
         private User loggedUser;
-        static AlterEventRepeater _evRepeater;
-        private bool status;
-
+        private static bool status = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -26,14 +25,17 @@ namespace DESClient
             App.IDes.alterEvent += _evRepeater.Repeater;
         }
 
+
         public void DoAlterations(DES.Operation op)
         {
-            if(op == DES.Operation.Change || op == DES.Operation.Add)
-                this.Dispatcher.Invoke((Action)(LoadValues));
-            else if(op == DES.Operation.StartSuspension)
+            if (op == DES.Operation.Change || op == DES.Operation.Add)
+                Dispatcher.Invoke(LoadValues);
+            else if (op == DES.Operation.StartSuspension)
             {
+                
                 if (App.IDes.GetSaleOrders(ref loggedUser).Any(order => !order.Processed))
                 {
+
                     alertChange(true);
                     status = true;
                 }
@@ -47,20 +49,22 @@ namespace DESClient
             {
                 alertChange(false);
                 status = false;
+               
             }
-            else
-            {
-                return;
-            }
+        }
+
+        private void changeStatus()
+        {
+            MarketStatus.Text = status ? "Normal" : "Suspended";
         }
 
         private void LoadValues()
         {
             Quantity.Text = App.IDes.GetDiginotes(ref loggedUser).Count.ToString();
             StockVal.Text = App.IDes.GetQuote().ToString();
-            List<SaleOrder> saleOrders = App.IDes.GetSaleOrders(ref loggedUser);
+            var saleOrders = App.IDes.GetSaleOrders(ref loggedUser);
             sell_list.ItemsSource = saleOrders;
-            List<BuyOrder> buyOrders = App.IDes.GetBuyOrders(ref loggedUser);
+            var buyOrders = App.IDes.GetBuyOrders(ref loggedUser);
             buy_list.ItemsSource = buyOrders;
         }
 
@@ -70,7 +74,6 @@ namespace DESClient
             var password = Password.Password;
             if (user != null && password != null)
             {
-
                 var status = App.IDes.Login(user, password);
                 if (status == "Login successful!")
                 {
@@ -94,12 +97,12 @@ namespace DESClient
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
-           
             var user = UsernameNew.Text;
             var password = PasswordNew.Password;
             var passwordR = PasswordNewR.Password;
             var name = NameNew.Text;
-            if (passwordR != null && name != null && password != null && user != null && user.Length >= 6 && password.Length >= 6 && name.Length >= 6 && passwordR.Length == password.Length)
+            if (passwordR != null && name != null && password != null && user != null && user.Length >= 6 &&
+                password.Length >= 6 && name.Length >= 6 && passwordR.Length == password.Length)
             {
                 if (password == passwordR)
                 {
@@ -112,11 +115,9 @@ namespace DESClient
                         show_dashboard();
                         loggedUser = App.IDes.GetUser(user);
                         LoadValues();
-                        
                     }
                     else
                         infoboxreg.Text = status;
-                    
                 }
                 else
                 {
@@ -127,7 +128,6 @@ namespace DESClient
             {
                 infoboxreg.Text = "All fields must have more than 6 characters.";
             }
-
         }
 
         private void Registerbox_Click(object sender, RoutedEventArgs e)
@@ -145,13 +145,12 @@ namespace DESClient
         private void logout_click(object sender, RoutedEventArgs e)
         {
             var status = App.IDes.Logout(_username, _password);
-         
+
             if (status.Equals("Logout successful!"))
             {
                 main.Visibility = Visibility.Hidden;
                 register.Visibility = Visibility.Hidden;
                 login.Visibility = Visibility.Visible;
-               
             }
         }
 
@@ -187,7 +186,6 @@ namespace DESClient
             {
                 InfoBox_Dash.Text = "Check your input value.";
             }
-           
         }
 
         private void Add_Buy_Click(object sender, RoutedEventArgs e)
@@ -222,14 +220,14 @@ namespace DESClient
             }
         }
 
-        private void buy_list_Click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void buy_list_Click(object sender, MouseButtonEventArgs e)
         {
             try
             {
                 Update.Visibility = Visibility.Visible;
-                DataGrid selected = sender as DataGrid;
+                var selected = sender as DataGrid;
                 //idEdited quantEdited valueEdited statusEdited valEdited
-                BuyOrder current = (BuyOrder) selected.CurrentItem;
+                var current = (BuyOrder) selected.CurrentItem;
                 idEdited.Text = current.Id.ToString();
                 quantEdited.Text = current.Quantity.ToString();
                 valueEdited.Text = current.Value.ToString();
@@ -243,14 +241,14 @@ namespace DESClient
             }
         }
 
-        private void sell_list_click(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void sell_list_click(object sender, MouseButtonEventArgs e)
         {
             try
             {
                 Update.Visibility = Visibility.Visible;
                 //idEdited quantEdited valueEdited statusEdited valEdited
-                DataGrid selected = sender as DataGrid;
-                SaleOrder current = (SaleOrder)selected.CurrentItem;
+                var selected = sender as DataGrid;
+                var current = (SaleOrder) selected.CurrentItem;
                 idEdited.Text = current.Id.ToString();
                 quantEdited.Text = current.Quantity.ToString();
                 valueEdited.Text = current.Value.ToString();
@@ -266,21 +264,19 @@ namespace DESClient
 
         private void deleteOrder_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void alertChange(bool status)
         {
             string alert;
+            Dispatcher.Invoke(changeStatus);
             if (status)
-                alert = "Market Quote changed. You have 1 minute to change your orders.";
+                alert = "Market Quote changed. \nYou have 1 minute to change your orders. \nMarket Status: Suspended.";
             else
             {
-                alert = "Market Quote changed. Timeout.";
+                alert = "Time to change ended. \nMarket Status: Normal";
             }
-            MessageBoxResult result = MessageBox.Show(alert, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
-
+            var result = MessageBox.Show(alert, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-
     }
 }

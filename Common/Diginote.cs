@@ -5,22 +5,23 @@ namespace Common
     [Serializable]
     public class Diginote
     {
-        private static int Serial = 0;
-        public int Id { get; set; }
-        public float Quote { get; set; }
+        private static int Serial;
 
         public Diginote()
         {
             Serial += 1;
-            this.Id = Serial;
-            this.Quote = 1.0f;
+            Id = Serial;
+            Quote = 1.0f;
         }
 
         public Diginote(int id)
         {
-            this.Id = id;
-            this.Quote = 1.0f;
+            Id = id;
+            Quote = 1.0f;
         }
+
+        public int Id { get; set; }
+        public float Quote { get; set; }
 
         public override string ToString()
         {

@@ -7,23 +7,23 @@ using Common;
 
 namespace Client
 {
-    class ClientApp
+    internal class ClientApp
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             new ClientConsole();
         }
 
-        class ClientConsole
+        private class ClientConsole
         {
-            private IDES _iDes;
+            private readonly IDES _iDes;
             private User loggedUser;
-            Dictionary<Diginote, User> market;
+            private Dictionary<Diginote, User> market;
 
             public ClientConsole()
             {
                 RemotingConfiguration.Configure("Client.exe.config", false);
-                _iDes = (IDES)RemoteNew.New(typeof(IDES));
+                _iDes = (IDES) RemoteNew.New(typeof (IDES));
                 Console.WriteLine("Diginote Exchange System v0.1");
                 Console.WriteLine("Welcome!");
                 string option;
@@ -31,7 +31,7 @@ namespace Client
                 {
                     Console.WriteLine();
                     Console.WriteLine("Menu:");
-                    if(loggedUser == null)
+                    if (loggedUser == null)
                     {
                         Console.WriteLine("1 - Login");
                         Console.WriteLine("2 - Add User");
@@ -114,9 +114,7 @@ namespace Client
                                 break;
                         }
                     }
-                    
-                }
-                while (option != "0");
+                } while (option != "0");
             }
 
             public void addUser()
@@ -124,12 +122,12 @@ namespace Client
                 Console.WriteLine("Add User");
 
                 Console.Write("Name: ");
-                string name = Console.ReadLine();
+                var name = Console.ReadLine();
                 Console.Write("Nickname: ");
-                string nickname = Console.ReadLine();
+                var nickname = Console.ReadLine();
                 Console.Write("Password: ");
-                string password = Console.ReadLine();
-                string result = _iDes.AddUser(name, nickname, password);
+                var password = Console.ReadLine();
+                var result = _iDes.AddUser(name, nickname, password);
                 Console.WriteLine(result);
             }
 
@@ -138,10 +136,10 @@ namespace Client
                 Console.WriteLine("Remove User");
 
                 Console.Write("Nickname: ");
-                string nickname = Console.ReadLine();
+                var nickname = Console.ReadLine();
                 Console.Write("Password: ");
-                string password = Console.ReadLine();
-                string result = _iDes.RemoveUser(nickname, password);
+                var password = Console.ReadLine();
+                var result = _iDes.RemoveUser(nickname, password);
                 Console.WriteLine(result);
             }
 
@@ -150,10 +148,10 @@ namespace Client
                 Console.WriteLine("Login");
 
                 Console.Write("Nickname: ");
-                string nickname = Console.ReadLine();
+                var nickname = Console.ReadLine();
                 Console.Write("Password: ");
-                string password = Console.ReadLine();
-                string result = _iDes.Login(nickname, password);
+                var password = Console.ReadLine();
+                var result = _iDes.Login(nickname, password);
                 Console.WriteLine(result);
                 if (result.Equals("Login successful!"))
                 {
@@ -167,10 +165,10 @@ namespace Client
                 Console.WriteLine("Logout");
 
                 Console.Write("Nickname: ");
-                string nickname = Console.ReadLine();
+                var nickname = Console.ReadLine();
                 Console.Write("Password: ");
-                string password = Console.ReadLine();
-                string result = _iDes.Logout(nickname, password);
+                var password = Console.ReadLine();
+                var result = _iDes.Logout(nickname, password);
                 Console.WriteLine(result);
                 if (result.Equals("Logout successful!"))
                 {
@@ -183,7 +181,7 @@ namespace Client
             {
                 Console.WriteLine("Users");
 
-                List<User> users = _iDes.GetUsersList();
+                var users = _iDes.GetUsersList();
 
                 if (users.Count == 0)
                 {
@@ -192,7 +190,7 @@ namespace Client
                 else
                 {
                     var userIndex = 0;
-                    foreach (User user in users)
+                    foreach (var user in users)
                     {
                         Console.WriteLine();
                         Console.WriteLine("User #" + (userIndex + 1));
@@ -238,7 +236,7 @@ namespace Client
             {
                 Console.WriteLine("Current Quote");
 
-                float quote = _iDes.GetQuote();
+                var quote = _iDes.GetQuote();
 
                 if (quote == 0.0f)
                 {
@@ -254,7 +252,7 @@ namespace Client
             {
                 Console.WriteLine("My Diginotes");
 
-                List<Diginote> diginotes = _iDes.GetDiginotes(ref loggedUser);
+                var diginotes = _iDes.GetDiginotes(ref loggedUser);
 
                 if (diginotes.Count == 0)
                 {
@@ -271,9 +269,9 @@ namespace Client
                 Console.WriteLine("New Sale Order");
 
                 Console.Write("Order's quantity: ");
-                int quantity = int.Parse(Console.ReadLine());
+                var quantity = int.Parse(Console.ReadLine());
 
-                string result = _iDes.AddSaleOrder(ref loggedUser, quantity);
+                var result = _iDes.AddSaleOrder(ref loggedUser, quantity);
 
                 Console.WriteLine(result);
             }
@@ -283,9 +281,9 @@ namespace Client
                 Console.WriteLine("New Buy Order");
 
                 Console.Write("Order's quantity: ");
-                int quantity = int.Parse(Console.ReadLine());
+                var quantity = int.Parse(Console.ReadLine());
 
-                string result = _iDes.AddBuyOrder(ref loggedUser, quantity);
+                var result = _iDes.AddBuyOrder(ref loggedUser, quantity);
 
                 Console.WriteLine(result);
             }
@@ -294,7 +292,7 @@ namespace Client
             {
                 Console.WriteLine("My Sale Orders");
 
-                List<SaleOrder> saleOrders = _iDes.GetSaleOrders(ref loggedUser);
+                var saleOrders = _iDes.GetSaleOrders(ref loggedUser);
 
                 if (saleOrders.Count == 0)
                 {
@@ -303,9 +301,10 @@ namespace Client
                 else
                 {
                     var saleOrderIndex = 1;
-                    foreach(Order saleOrder in saleOrders)
+                    foreach (Order saleOrder in saleOrders)
                     {
-                        Console.WriteLine("Id: " + saleOrderIndex + "; " + "Quantity: " + saleOrder.Quantity + "; " + "Value: " + saleOrder.Value);
+                        Console.WriteLine("Id: " + saleOrderIndex + "; " + "Quantity: " + saleOrder.Quantity + "; " +
+                                          "Value: " + saleOrder.Value);
                         Console.WriteLine("Processed: " + saleOrder.Processed);
                         saleOrderIndex += 1;
                     }
@@ -315,38 +314,34 @@ namespace Client
                 string option;
                 do
                 {
-                    Console.Write("Do you want to edit any order's value (must be less or equal than current quote)? (Y/N) ");
+                    Console.Write(
+                        "Do you want to edit any order's value (must be less or equal than current quote)? (Y/N) ");
                     option = Console.ReadLine();
                     if (option == "Y" || option == "y")
                     {
                         Console.Write("Please enter the order id: ");
-                        int orderId = int.Parse(Console.ReadLine());
-                        
+                        var orderId = int.Parse(Console.ReadLine());
+
                         float orderValue = 0;
                         do
                         {
                             Console.Write("Please enter the new value: ");
                             orderValue = float.Parse(Console.ReadLine());
-                        }
-                        while (orderValue > _iDes.GetQuote());
+                        } while (orderValue > _iDes.GetQuote());
 
-                        string result = _iDes.EditSaleOrder(orderId, orderValue);
+                        var result = _iDes.EditSaleOrder(orderId, orderValue);
                         Console.WriteLine(result);
 
                         break;
                     }
-                    else
+                    if (option != "N" && option != "n")
                     {
-                        if (option != "N" && option != "n")
-                        {
-                            Console.WriteLine("Invalid option!");
-                            option = "INVALID_OPTION";
-                        }
+                        Console.WriteLine("Invalid option!");
+                        option = "INVALID_OPTION";
                     }
-                }
-                while (option == "INVALID_OPTION");
+                } while (option == "INVALID_OPTION");
 
-                if(option == "Y" || option == "y")
+                if (option == "Y" || option == "y")
                 {
                     Console.WriteLine();
                     ListSaleOrders();
@@ -357,7 +352,7 @@ namespace Client
             {
                 Console.WriteLine("My Buy Orders");
 
-                List<BuyOrder> buyOrders = _iDes.GetBuyOrders(ref loggedUser);
+                var buyOrders = _iDes.GetBuyOrders(ref loggedUser);
 
                 if (buyOrders.Count == 0)
                 {
@@ -368,7 +363,8 @@ namespace Client
                     var buyOrderIndex = 1;
                     foreach (Order buyOrder in buyOrders)
                     {
-                        Console.WriteLine("Id: " + buyOrderIndex + "; " + "Quantity: " + buyOrder.Quantity + "; " + "Value: " + +buyOrder.Value);
+                        Console.WriteLine("Id: " + buyOrderIndex + "; " + "Quantity: " + buyOrder.Quantity + "; " +
+                                          "Value: " + +buyOrder.Value);
                         Console.WriteLine("Processed: " + buyOrder.Processed);
                         buyOrderIndex += 1;
                     }
@@ -378,36 +374,32 @@ namespace Client
                 string option;
                 do
                 {
-                    Console.Write("Do you want to edit any order's value (must be greater or equal than current quote)? (Y/N) ");
+                    Console.Write(
+                        "Do you want to edit any order's value (must be greater or equal than current quote)? (Y/N) ");
                     option = Console.ReadLine();
                     if (option == "Y" || option == "y")
                     {
                         Console.Write("Please enter the order id: ");
-                        int orderId = int.Parse(Console.ReadLine());
-                        
+                        var orderId = int.Parse(Console.ReadLine());
+
                         float orderValue = 0;
                         do
                         {
                             Console.Write("Please enter the new value: ");
                             orderValue = float.Parse(Console.ReadLine());
-                        }
-                        while (orderValue > _iDes.GetQuote());
+                        } while (orderValue > _iDes.GetQuote());
 
-                        string result = _iDes.EditBuyOrder(orderId, orderValue);
+                        var result = _iDes.EditBuyOrder(orderId, orderValue);
                         Console.WriteLine(result);
 
                         break;
                     }
-                    else
+                    if (option != "N" && option != "n")
                     {
-                        if (option != "N" && option != "n")
-                        {
-                            Console.WriteLine("Invalid option!");
-                            option = "INVALID_OPTION";
-                        }
+                        Console.WriteLine("Invalid option!");
+                        option = "INVALID_OPTION";
                     }
-                }
-                while (option == "INVALID_OPTION");
+                } while (option == "INVALID_OPTION");
 
                 if (option == "Y" || option == "y")
                 {
@@ -418,14 +410,15 @@ namespace Client
         }
 
         /* Mechanism for instanciating a remote object through its interface, using the config file */
-        class RemoteNew
+
+        private class RemoteNew
         {
-            private static Hashtable types = null;
+            private static Hashtable types;
 
             private static void InitTypeTable()
             {
                 types = new Hashtable();
-                foreach (WellKnownClientTypeEntry entry in RemotingConfiguration.GetRegisteredWellKnownClientTypes())
+                foreach (var entry in RemotingConfiguration.GetRegisteredWellKnownClientTypes())
                     types.Add(entry.ObjectType, entry);
             }
 
@@ -433,7 +426,7 @@ namespace Client
             {
                 if (types == null)
                     InitTypeTable();
-                WellKnownClientTypeEntry entry = (WellKnownClientTypeEntry)types[type];
+                var entry = (WellKnownClientTypeEntry) types[type];
                 if (entry == null)
                     throw new RemotingException("Type not found!");
                 return RemotingServices.Connect(type, entry.ObjectUrl);
