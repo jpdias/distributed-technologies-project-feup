@@ -60,12 +60,19 @@ namespace DESClient
 
         private void LoadValues()
         {
-            Quantity.Text = App.IDes.GetDiginotes(ref loggedUser).Count.ToString();
-            StockVal.Text = App.IDes.GetQuote().ToString();
-            var saleOrders = App.IDes.GetSaleOrders(ref loggedUser);
-            sell_list.ItemsSource = saleOrders;
-            var buyOrders = App.IDes.GetBuyOrders(ref loggedUser);
-            buy_list.ItemsSource = buyOrders;
+            try
+            {
+                Quantity.Text = App.IDes.GetDiginotes(ref loggedUser).Count.ToString();
+                StockVal.Text = App.IDes.GetQuote().ToString();
+                var saleOrders = App.IDes.GetSaleOrders(ref loggedUser);
+                sell_list.ItemsSource = saleOrders;
+                var buyOrders = App.IDes.GetBuyOrders(ref loggedUser);
+                buy_list.ItemsSource = buyOrders;
+            }
+            catch (Exception ex)
+            {
+                InfoBox_Dash.Text = "Server error. Try again later.";
+            }
         }
 
         private void Login_Click(object sender, RoutedEventArgs e)
@@ -83,7 +90,14 @@ namespace DESClient
                     login.Visibility = Visibility.Hidden;
                     main.Visibility = Visibility.Visible;
                     menu.Header = "Welcome " + user + "!";
-                    loggedUser = App.IDes.GetUser(user);
+                    try
+                    {
+                        loggedUser = App.IDes.GetUser(user);
+                    }
+                    catch (Exception exception)
+                    {
+                        infobox.Text = "Server error. Try again later.";
+                    }
                     LoadValues();
                 }
                 else
@@ -109,11 +123,25 @@ namespace DESClient
                     var status = App.IDes.AddUser(name, user, password);
                     if (status == "User added successfully!")
                     {
-                        App.IDes.Login(user, password);
+                        try
+                        {
+                            App.IDes.Login(user, password);
+                        }
+                        catch (Exception exception)
+                        {
+                            infobox.Text = "Server error. Try again later.";
+                        }
                         _username = user;
                         _password = password;
                         show_dashboard();
-                        loggedUser = App.IDes.GetUser(user);
+                        try
+                        {
+                            loggedUser = App.IDes.GetUser(user);
+                        }
+                        catch (Exception exception)
+                        {
+                            infobox.Text = "Server error. Try again later.";
+                        }
                         LoadValues();
                     }
                     else
@@ -144,13 +172,20 @@ namespace DESClient
 
         private void logout_click(object sender, RoutedEventArgs e)
         {
-            var status = App.IDes.Logout(_username, _password);
-
-            if (status.Equals("Logout successful!"))
+            try
             {
-                main.Visibility = Visibility.Hidden;
-                register.Visibility = Visibility.Hidden;
-                login.Visibility = Visibility.Visible;
+                var status = App.IDes.Logout(_username, _password);
+
+                if (status.Equals("Logout successful!"))
+                {
+                    main.Visibility = Visibility.Hidden;
+                    register.Visibility = Visibility.Hidden;
+                    login.Visibility = Visibility.Visible;
+                }
+            }
+            catch (Exception exception)
+            {
+                InfoBox_Dash.Text = "Server error. Try again later.";
             }
         }
 
@@ -174,8 +209,15 @@ namespace DESClient
             string result;
             if (Double.TryParse(Sell_Val.Text, out value))
             {
-                result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(value));
-                InfoBox_Dash.Text = result;
+                try
+                {
+                    result = App.IDes.AddSaleOrder(ref loggedUser, Convert.ToInt32(value));
+                    InfoBox_Dash.Text = result;
+                }
+                catch (Exception exception)
+                {
+                    InfoBox_Dash.Text = "Server error. Try again later.";
+                }
             }
             else
             {
@@ -189,8 +231,15 @@ namespace DESClient
             string result;
             if (Double.TryParse(BuyVal.Text, out value))
             {
-                result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(value));
-                InfoBox_Dash.Text = result;
+                try
+                {
+                    result = App.IDes.AddBuyOrder(ref loggedUser, Convert.ToInt32(value));
+                    InfoBox_Dash.Text = result;
+                }
+                catch (Exception exception)
+                {
+                    InfoBox_Dash.Text = "Server error. Try again later.";
+                }
             }
             else
             {
@@ -204,10 +253,17 @@ namespace DESClient
             string result;
             if (Double.TryParse(idEdited.Text, out value))
             {
-                result = typeofOp.Text == "Sell"
-                    ? App.IDes.EditSaleOrder(Convert.ToInt32(value), Convert.ToSingle(valEdited.Text))
-                    : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
-                InfoBox_Dash.Text = result;
+                try
+                {
+                    result = typeofOp.Text == "Sell"
+                        ? App.IDes.EditSaleOrder(Convert.ToInt32(value), Convert.ToSingle(valEdited.Text))
+                        : App.IDes.EditBuyOrder(Convert.ToInt32(idEdited.Text), Convert.ToSingle(valEdited.Text));
+                    InfoBox_Dash.Text = result;
+                }
+                catch (Exception exception)
+                {
+                    InfoBox_Dash.Text = "Server error. Try again later.";
+                }
             }
             else
             {
@@ -259,12 +315,19 @@ namespace DESClient
 
         private void deleteOrder_Click(object sender, RoutedEventArgs e)
         {
-            if(typeofOp.Text == "Sell")
-                App.IDes.RemoveSaleOrder(Convert.ToInt32(idEdited.Text));
-            else
-                App.IDes.RemoveBuyOrder(Convert.ToInt32(idEdited.Text));
+            try
+            {
+                if(typeofOp.Text == "Sell")
+                    App.IDes.RemoveSaleOrder(Convert.ToInt32(idEdited.Text));
+                else
+                    App.IDes.RemoveBuyOrder(Convert.ToInt32(idEdited.Text));
 
-            Update.Visibility = Visibility.Hidden;
+                Update.Visibility = Visibility.Hidden;
+            }
+            catch (Exception exception)
+            {
+                InfoBox_Dash.Text = "Server error. Try again later.";
+            }
         }
 
         private void alertChange(bool status)
