@@ -64,8 +64,11 @@
               VerticalAlignment="Top" Width="748" Visibility="Hidden">
             <Menu Margin="598,10,10,392" FontSize="14" Background="#F5702E">
                 <MenuItem x:Name="menu" Header="User" Height="30" Width="140" Foreground="#FFECF0F1">
+                    <MenuItem Header="Wallet" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0"
+                              Click="wallet_Click" Background="#F5702E" Foreground="#FFECF0F1" />
                     <MenuItem Header="Logout" HorizontalAlignment="Left" Width="160" Margin="-30,0,0,0"
                               Click="logout_click" Background="#F5702E" Foreground="#FFECF0F1" />
+                    
                 </MenuItem>
             </Menu>
             <DataGrid x:Name="buy_list" CanUserReorderColumns="False" CanUserResizeRows="False"
@@ -100,10 +103,10 @@
             </DataGrid>
 
             <TextBlock HorizontalAlignment="Left" Margin="0,6,0,0" TextWrapping="Wrap" Text="My Diginotes:"
-                       VerticalAlignment="Top" Height="29" Width="146" FontSize="20" Foreground="#D7C09C"
+                       VerticalAlignment="Top" Height="29" Width="135" FontSize="20" Foreground="#D7C09C"
                        TextAlignment="Center" />
-            <TextBlock x:Name="Quantity" HorizontalAlignment="Left" Height="30" Margin="140,7,0,0" TextWrapping="Wrap"
-                       Text="0.0" VerticalAlignment="Top" Width="57" FontSize="20" Foreground="#FFF5702E"
+            <TextBlock x:Name="Quantity" HorizontalAlignment="Left" Height="30" Margin="136,7,0,0" TextWrapping="Wrap"
+                       Text="0" VerticalAlignment="Top" Width="57" FontSize="20" Foreground="#FFF5702E"
                        Background="#FF061A1C" />
             <TextBlock HorizontalAlignment="Left" Margin="197,5,0,0" TextWrapping="Wrap" Text="Quote Value:"
                        VerticalAlignment="Top" Height="30" Width="120" FontSize="20" Foreground="#D7C09C"

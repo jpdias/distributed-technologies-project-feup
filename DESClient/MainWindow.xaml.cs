@@ -81,27 +81,27 @@ namespace DESClient
             var password = Password.Password;
             if (user != null && password != null)
             {
-                var status = App.IDes.Login(user, password);
-                if (status == "Login successful!")
+                try
                 {
-                    _username = user;
-                    _password = password;
-                    register.Visibility = Visibility.Hidden;
-                    login.Visibility = Visibility.Hidden;
-                    main.Visibility = Visibility.Visible;
-                    menu.Header = "Welcome " + user + "!";
-                    try
+                    var status = App.IDes.Login(user, password);
+                    if (status == "Login successful!")
                     {
+                        _username = user;
+                        _password = password;
+                        register.Visibility = Visibility.Hidden;
+                        login.Visibility = Visibility.Hidden;
+                        main.Visibility = Visibility.Visible;
+                        menu.Header = "Welcome " + user + "!";
                         loggedUser = App.IDes.GetUser(user);
+                        LoadValues();
                     }
-                    catch (Exception exception)
-                    {
-                        infobox.Text = "Server error. Try again later.";
-                    }
-                    LoadValues();
+                    else
+                        infobox.Text = status;
                 }
-                else
-                    infobox.Text = status;
+                catch (Exception exception)
+                {
+                    infobox.Text = "Server error. Try again later.";
+                }
             }
             else
             {
@@ -341,6 +341,16 @@ namespace DESClient
                 alert = "Time to change ended. \nMarket Status: Normal";
             }
             var result = MessageBox.Show(alert, "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void wallet_Click(object sender, RoutedEventArgs e)
+        {
+            var message = "";
+            foreach (var digi in App.IDes.GetDiginotes(ref loggedUser))
+            {
+                message += digi.Id.ToString() +"; ";
+            }
+            MessageBox.Show(message, "Wallet", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
